@@ -1,0 +1,52 @@
+{% extends 'news.html' %}
+
+{% block title %}{{ doc.title }}{% endblock %}
+
+{% block content %}
+
+  <div class="page-header">
+    <div class="input-group-lg" align="center">
+      <div class="input-group-btn">
+        <span class="btn btn-success" type="button">
+          <a href="{% url 'docs_newest' %}">Сортировать по дате</a>
+        </span>
+      </div>
+      <div class="input-group-btn">
+        <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown">
+           Поиск по категории&nbsp;&nbsp;<span class="caret"></span>
+        </button>
+        {% if categories%}
+          <ul class="dropdown-menu" role="menu">
+            {% for category in categories %}
+              <li><a href="{{ category.get_url }}">{{ category.name }}</a></li>
+              <span class="separator" role="divider"></span>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      </div>
+    </div>
+    <span class="divider" role="separator"></span>
+    <h1 class="text-center"> {{ doc.title }} </h1>
+  </div>
+  {% if doc.description %}
+    <p class="lead text-center"> {{ doc.description }} </p>
+  {% endif %}
+  {% if doc.doc_url %}
+    <div class="media" align="center">
+      {% if is_pdf %}
+        <embed class="mbou-media" src="{{ doc.doc_url }}"></embed>
+      {% else %}
+        <iframe class="mbou-media" src="http://docs.google.com/viewer?url={{ doc.doc_url }}&embedded=true"></iframe>
+      {% endif %}
+    </div>
+  {% endif %}
+  {% if doc.categories %}
+    <div class="categories" align="center">
+      {% for category in doc.categories.all %}
+        <a href="{{ category.get_url }}" class="categories-category categories-category-{{ category.get_color_display }}">{{ category.name }}</a>
+      {% endfor %}
+    </div>
+  {% endif %}
+  <span class="divider" role="separator"></span>
+  <p class="text-muted" align="center">Опубликовано {{ doc.pub_date }}.</p>
+{% endblock %}

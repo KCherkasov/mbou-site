@@ -1,0 +1,175 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {% block meta %}
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta name="description" content="официальный сайт МБОУ СОШ №7 г.Лобня">
+    <meta name="author" content="Кирилл Черкасов">
+
+    {% endblock %}
+
+    <title> {% block title %} {% endblock %} | МБОУ СОШ №7 г.Лобня</title>
+
+    <!-- Bootstrap -->
+    {% load static %}
+
+    {% block styles %}
+
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/ie10-viewport-bug-workaround.css' %}" rel="stylesheet">
+    <link href="{% static 'css/sticky-footer-navbar.css' %}" rel="stylesheet">
+    <link href="{% static 'css/dashboard.css' %}" rel="stylesheet">
+    <link href="{% static 'css/adjustments.css' %}" rel="stylesheet">
+
+    {% endblock %}
+
+    <script src="{% static 'js/ie-emulation-modes-warning.js' %}"></script>
+
+    <link rel="icon" href="{{ MEDIA_URL }}/pics/favicon.png">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+      {% block navigation %}
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <p class="navbar-text"><a class="navbar-brand" href="{% url 'index' %}"><img src="{{ MEDIA_URL }}/pics/mbou-7_300_25p.gif" width="110px" height="110px"> МБОУ СОШ №7</a></p>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+          <ul class="nav navbar-nav navbar-left navbar-text lead">
+            <li class="dropdown"><a href="#"{%block news_styles%}{% endblock %}>Новости <span class="caret"></span></a> {% block news %}{% endblock %}</li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">О школе <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li><a href="#">Годовой календарный учебный план</a></li>
+                <li role="separator" class="divider"></li>
+                <li><a href="#">История школы</a></li>
+                <li role="separator" class="divider"></li>
+                <li><a href="#">Символика школы</a></li>
+                <li role="separator" class="divider"></li>
+                <li><a href="#">Стандарт оформления образовательной организации</a></li>
+                <li role="separator" class="divider"></li>
+                <li><a href="#">Участие в региональных конкурсах</a></li>
+              </ul>
+            </li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Расписание <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li class="dropdown-header">Звонки</li>
+                <li role="separator" class="divider"></li>
+                <li><a href="{% url 'lessons_show' %}">Расписание звонков</a></li>
+              </ul>
+            </li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Документы <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li class="dropdown-header">Категории</li>
+                <li role="separator" class="divider"></li>
+                {% if cats %}
+                  {% for category in cats %}
+                    <li><a href="{{ category.get_url }}">{{ category.name }}</a></li>
+                  {% endfor %}
+                  <li role="separator" class="divider"></li>
+                {% endif %}
+                  <li class="dropdown-header"><a href="{% url 'docs_newest' %}">Все документы</a></li>
+              </ul>
+            </li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Коллектив <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li><a href="#">Администрация</a></li>
+                <li role="separator" class="divider"></li>
+                <li class="dropdown-header">Педагоги</li>
+                <li><a href="#">Начальная школа</a></li>
+                <li><a href="#">Старшие классы</a></li>
+              </ul>
+            </li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Учебный процесс <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li><a href="#">Учебный план</a></li>
+                <li role="separator" class="divider"></li>
+                <li><a href="#">Дополнительное образование</a></li>
+                <li role="separator" class="divider"></li>
+                <li class="dropdown-header">Этапы обучения</li>
+                <li><a href="#">Начальные классы</a></li>
+                <li><a href="#">Средняя школа</a></li>
+                <li><a href="#">Старшая школа</a></li>
+                <li role="separator" class="divider"></li>
+                <li class="dropdown-header">Экзамены</li>
+                <li><a href="#">ЕГЭ</a></li>
+                <li><a href="#">ГИА</a></li>
+                <li role="separator" class="divider"></li>
+                <li><a href="#">Методическая работа</a></li>
+                <li role="separator" class="divider"></li>
+                <li><a href="#">Электронные сервисы</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+      {% endblock %}
+    </nav>
+
+    <!-- Begin page content -->
+    <div class="container content">
+      <div class="row">
+      {% if request.user.is_authenticated %}
+        {% block controls %}
+          <div class="col-sm-3 col-md-2 sidebar" role="group" aria-label="controls">
+             <div class="page-header">
+               <h5 class="text-center">Панель управления</h5>
+               <h5 class="text-center">Здравствуйте, {{ request.user.first_name }}!</h5>
+             </div>
+             <ul class="nav nav-sidebar">
+               <li><a href="{% url 'profile-edit' %}">Редактировать профиль</a></li>
+               <li><a href="{% url 'logout' %}">Выйти</a></li>
+               <li><span class="separator" role="divider"></span></li>
+               <li><a href="{% url 'add_news' %}">Добавить новость</a></li>
+               <li><a href="{% url 'edit_lesson' %}">Редактировать звонки</a></li>
+               <li><a href="{% url 'document_add' %}">Добавить документ</a></li>
+             </ul>
+          </div>
+        {% endblock %}
+      {% endif %}
+        <div class=" col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+          {% block content %}
+          {% endblock %}
+        </div>
+      </div>
+    </div>
+
+    <footer class="footer">
+      {% block footer %}
+      <div class="container" align = "center">
+        <p class="text-muted">&#169; Все права защищены. 2013-{{ year|date:"Y" }}.</p>
+      </div>
+      {% endblock %}
+    </footer>
+
+
+    {% block scripts %}
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    {% endblock %}
+  </body>
+</html>

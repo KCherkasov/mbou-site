@@ -1,0 +1,14 @@
+{% extends "news.html" %}
+
+{% block title %}
+{{ n.title }}
+{% endblock %}
+
+{% block content %}
+  <div class="page-header">
+    <h1>{{ n.title }}</h1>
+  </div>
+  <p class="lead">{{ n.content }}</p>
+  <span class="divider" role="separator"></span>
+  <p class="text-muted">Опубликовано {{ n.pub_date }}</p>
+{% endblock %}
