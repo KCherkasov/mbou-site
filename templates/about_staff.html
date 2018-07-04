@@ -1,0 +1,50 @@
+{% extends "news.html" %}
+
+{% block title %}
+Сведения об образовательной организации - Руководство. Педагогический состав
+{% endblock %}
+
+{% block content %}
+    <div class="page-header">
+        <h2>Руководство. Педагогический состав</h2>
+    </div>
+    <hr/>
+    <ul style="list-style: none">
+        <li>
+            <b><a href="{% url 'staff_admin' %}" style="text-decoration: none">Администрация МБОУ СОШ №7</a>:</b>
+            <ul style="list-style: none">
+                {% if members %}
+                    {% for staff_member in members %}
+                        <li>
+                            <p>
+                                <b>
+                                    <i>
+                                        {{ staff_member.chair_position }}:
+                                    </i>
+                                </b>
+                                &nbsp;{{ staff_member.last_name }}
+                                &nbsp;{{ staff_member.first_name }}
+                                &nbsp;{{ staff_member.middle_name }}
+                            </p>
+                            <ul style="list-style: none">
+                                <li>
+                                    <p>
+                                        <b><i>Электронная почта:</i></b>&nbsp;
+                                        <a href="mailto:{{ staff_member.email }}">
+                                            {{ staff_member.email }}
+                                        </a>
+                                    </p>
+                                </li>
+                            </ul>
+                        </li>
+                    {% endfor %}
+                {% endif %}
+            </ul>
+        </li>
+        <li><hr/></li>
+        <li>
+            <a href="{% url 'staff_all' %}" style="text-decoration: none"><b>Педагогический состав МБОУ СОШ №7</b></a>
+        </li>
+        <li><hr/></li>
+    </ul>
+{% endblock %}

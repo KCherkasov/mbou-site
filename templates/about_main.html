@@ -1,0 +1,30 @@
+{% extends "news.html" %}
+
+{% block title %}
+Сведения об образовательной организации - главная
+{% endblock %}
+
+{% block content %}
+    <div class="page-header">
+        <h2>
+            Сведения об образовательной организации
+        </h2>
+    </div>
+    <ul style="list-style: none">
+        <li><a href="{% url 'about_general' %}">Основные сведения</a></li>
+        <li><a href="{% url 'about_structure' %}">Структура и органы управления образовательной организацией</a></li>
+        <li><a href="{% url 'about_docs' %}">Документы</a></li>
+        <li><a href="{% url 'about_education' %}">Образование</a></li>
+        <li><a href="{% url 'about_standards' %}">Образовательные стандарты</a></li>
+        <li><a href="{% url 'about_staff' %}">Руководство. Педагогический состав</a></li>
+        <li>
+            <a href="{% url 'about_mto' %}">
+                Материально-техническое обеспечение и оснащенность образовательного процесса
+            </a>
+        </li>
+        <li><a href="{% url 'about_support' %}">Стипендии и иные виды материальной поддержки</a></li>
+        <li><a href="{% url 'about_additional' %}">Платные образовательные услуги</a></li>
+        <li><a href="{% url 'about_financial' %}">Финансово-хозяйственная деятельность</a></li>
+        <li><a href="{% url 'about_vacancies' %}">Вакантные места для приема(перевода)</a></li>
+    </ul>
+{% endblock %}

@@ -58,15 +58,16 @@
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">О школе <span class="caret"></span></a>
               <ul class="dropdown-menu">
-                <li><a href="#">Годовой календарный учебный план</a></li>
+                <li><a href="{% url 'about_main' %}">Сведения об образовательной органищации</a></li>
+                <li><a href="{% url 'curriculum' %}">Годовой календарный учебный план</a></li>
                 <li role="separator" class="divider"></li>
                 <li><a href="#">История школы</a></li>
                 <li role="separator" class="divider"></li>
                 <li><a href="#">Символика школы</a></li>
                 <li role="separator" class="divider"></li>
-                <li><a href="#">Стандарт оформления образовательной организации</a></li>
+                <li><a href="{% url 'school_standard' %}">Стандарт оформления образовательной организации</a></li>
                 <li role="separator" class="divider"></li>
-                <li><a href="#">Участие в региональных конкурсах</a></li>
+                <li><a href="{% url 'regional_contests' %}">Участие в региональных конкурсах</a></li>
               </ul>
             </li>
             <li class="dropdown">
@@ -94,19 +95,19 @@
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Коллектив <span class="caret"></span></a>
               <ul class="dropdown-menu">
-                <li><a href="#">Администрация</a></li>
+                <li><a href="{% url 'staff_admin' %}">Администрация</a></li>
                 <li role="separator" class="divider"></li>
-                <li class="dropdown-header">Педагоги</li>
-                <li><a href="#">Начальная школа</a></li>
-                <li><a href="#">Старшие классы</a></li>
+                <li class="dropdown-header"><a href="{% url 'staff_all' %}">Педагоги</a></li>
+                <li><a href="{% url 'staff_elementary' %}">Начальная школа</a></li>
+                <li><a href="{% url 'staff_not_elementary' %}">Старшие классы</a></li>
               </ul>
             </li>
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Учебный процесс <span class="caret"></span></a>
               <ul class="dropdown-menu">
-                <li><a href="#">Учебный план</a></li>
+                <li><a href="{% url 'curriculum' %}">Учебный план</a></li>
                 <li role="separator" class="divider"></li>
-                <li><a href="#">Дополнительное образование</a></li>
+                <li><a href="{% url 'additional_education' %}">Дополнительное образование</a></li>
                 <li role="separator" class="divider"></li>
                 <li class="dropdown-header">Этапы обучения</li>
                 <li><a href="#">Начальные классы</a></li>
@@ -117,7 +118,7 @@
                 <li><a href="#">ЕГЭ</a></li>
                 <li><a href="#">ГИА</a></li>
                 <li role="separator" class="divider"></li>
-                <li><a href="#">Методическая работа</a></li>
+                <li><a href="{% url 'methodical_work' %}">Методическая работа</a></li>
                 <li role="separator" class="divider"></li>
                 <li><a href="#">Электронные сервисы</a></li>
               </ul>
@@ -145,6 +146,7 @@
                <li><a href="{% url 'add_news' %}">Добавить новость</a></li>
                <li><a href="{% url 'edit_lesson' %}">Редактировать звонки</a></li>
                <li><a href="{% url 'document_add' %}">Добавить документ</a></li>
+               <li><a href="#">Добавить педагога</a></li>
              </ul>
           </div>
         {% endblock %}

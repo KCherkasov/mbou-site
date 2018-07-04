@@ -8,13 +8,14 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.utils import timezone
 
+from mbou import categories
 from mbou import miscellaneous
 from mbou.forms import AddNewsForm, LessonTimingForm, DocumentForm, SignInForm, ProfileEditForm
-from mbou.models import News, LessonTiming, Document, DocumentCategory
+from mbou.models import News, LessonTiming, Document, DocumentCategory, StaffMember
 
 
 def index(request):
-    return render(request, 'index.html', {"news": News.objects.all, 'year' : timezone.now,
+    return render(request, 'index.html', {"news": News.objects.all, 'year': timezone.now,
                                           "cats": DocumentCategory.objects.get_top_X, })
 
 
@@ -106,43 +107,139 @@ def docs_newest(request):
 def docs_by_category(request, cat_name):
     try:
         cat_obj = DocumentCategory.objects.get_by_name_id(cat_name)
+        documents = Document.objects.by_category(cat_obj)
     except DocumentCategory.DoesNotExist:
-        raise Http404()
-    documents = Document.objects.by_category(cat_obj)
+        documents = Document.objects.newest()
     pagination = miscellaneous.paginate(documents, request, key='document')
     return render(request, 'docs_list.html', {'title': u'Новые документы', 'news': News.objects.all,
                                               'year': timezone.now, 'docs': pagination,
                                               'categories': DocumentCategory.objects.order_by_doc_count().all,
-                                              "cats": DocumentCategory.objects.get_top_X, "cat_name": cat_obj.name, })
+                                              "cats": DocumentCategory.objects.get_top_X, "cat_name": cat_name, })
 
 
-def gallery_add(request):
-    if request.method == 'POST':
-        form = GalleryAddForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect(reverse('galleries'))
-    else:
-        form = GalleryAddForm()
-    return render(request, 'gallery_add.html', {'form': form, 'news': News.objects.all, "year": timezone.now,
+def docs_by_cat_name(request, cat_name):
+    try:
+        cat_obj = DocumentCategory.objects.get_by_name(cat_name)
+        documents = Document.objects.by_category(cat_obj)
+    except DocumentCategory.DoesNotExist:
+        documents = Document.objects.newest()
+    pagination = miscellaneous.paginate(documents, request, key='document')
+    return render(request, 'docs_list.html', {'title': u'Новые документы', 'news': News.objects.all,
+                                              'year': timezone.now, 'docs': pagination,
+                                              'categories': DocumentCategory.objects.order_by_doc_count().all,
+                                              "cats": DocumentCategory.objects.get_top_X, "cat_name": cat_name, })
+
+
+def about_main(request):
+    return render(request, 'about_main.html', {"news": News.objects.all, 'year': timezone.now,
+                                               "cats": DocumentCategory.objects.get_top_X, })
+
+
+def about_general(request):
+    return render(request, 'about_general.html', {"news": News.objects.all, 'year': timezone.now,
+                                                  "cats": DocumentCategory.objects.get_top_X, })
+
+
+def about_education(request):
+    return render(request, 'about_education.html', {"news": News.objects.all, 'year': timezone.now,
+                                                    "cats": DocumentCategory.objects.get_top_X, })
+
+
+def about_staff(request):
+    return render(request, 'about_staff.html', {"news": News.objects.all, 'year': timezone.now,
                                                 "cats": DocumentCategory.objects.get_top_X, })
 
 
-def photo_add(request):
-    if request.method == 'POST':
-        form = PhotoAddForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect(reverse('photo_add'))
-    else:
-        form = PhotoAddForm()
-    return render(request, 'photo_add.html', {'form': form, 'year': timezone.now, 'news': News.objects.all,
-                                              'cats': DocumentCategory.objects.get_top_X, })
+def about_standards(request):
+    return render(request, 'about_standards.html', {"news": News.objects.all, 'year': timezone.now,
+                                                    "cats": DocumentCategory.objects.get_top_X, })
+
+
+def about_structure(request):
+    return render(request, 'about_structure.html', {"news": News.objects.all, 'year': timezone.now,
+                                                    "cats": DocumentCategory.objects.get_top_X, })
+
+
+def about_vacancies(request):
+    return render(request, 'about_vacancies.html', {"news": News.objects.all, 'year': timezone.now,
+                                                    "cats": DocumentCategory.objects.get_top_X, })
+
+
+def about_docs_all(request):
+    return docs_by_cat_name(request, categories.about_docs_category)
+
+
+def about_financial(request):
+    return docs_by_cat_name(request, categories.financial_category)
+
+
+def about_mto(request):
+    return docs_by_cat_name(request, categories.mto_category)
+
+
+def about_support(request):
+    return docs_by_cat_name(request, categories.support_category)
+
+
+def about_additional(request):
+    return docs_by_cat_name(request, categories.additional_category)
+
+
+def educational_work(request):
+    return docs_by_cat_name(request, categories.vosp_category)
+
+
+def methodical(request):
+    return docs_by_cat_name(request, categories.methodical_category)
+
+
+def curriculum(request):
+    return docs_by_cat_name(request, categories.curriculum_category)
+
+
+def annotations(request):
+    return docs_by_cat_name(request, categories.annotations_category)
+
+
+def main_language(request):
+    return docs_by_category(request, categories.main_language_category)
+
+
+def about_schedules(request):
+    return docs_by_cat_name(request, categories.schedules_category)
+
+
+def programs(request):
+    return docs_by_cat_name(request, categories.programs_category)
+
+
+def credentials(request):
+    return docs_by_cat_name(request, categories.credits_category)
+
+
+def council(request):
+    return docs_by_cat_name(request, categories.council_category)
+
+
+def vacancies(request):
+    return docs_by_cat_name(request, categories.vacancies_categories)
+
+
+def photos(request):
+    return docs_by_cat_name(request, categories.photos)
+
+
+def regional_contests(request):
+    return docs_by_cat_name(request, categories.reqional_contests_category)
+
+
+def school_standard(request):
+    return docs_by_cat_name(request, categories.school_standard_category)
 
 
 def login(request):
     redirect = request.GET.get('continue', '/')
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         return HttpResponseRedirect(redirect)
     if request.method == 'POST':
         form = SignInForm(request.POST)
@@ -156,6 +253,33 @@ def login(request):
     return render(request, 'login.html', {'form': form, })
 
 
+def staff_list_all(request):
+    return render(request, 'staff_teachers.html', {"news": News.objects.all, 'year': timezone.now,
+                                                   "cats": DocumentCategory.objects.get_top_X,
+                                                   "members": StaffMember.objects.all, })
+
+
+def staff_list_admin(request):
+    members = StaffMember.objects.get_chairmen()
+    return render(request, 'staff_admin.html', {"news": News.objects.all, 'year': timezone.now,
+                                                "cats": DocumentCategory.objects.get_top_X,
+                                                "members": members, })
+
+
+def staff_list_elementary(request):
+    members = StaffMember.objects.get_elementary_teachers()
+    return render(request, 'staff_elementary.html', {"news": News.objects.all, 'year': timezone.now,
+                                                     "cats": DocumentCategory.objects.get_top_X,
+                                                     "members": members, })
+
+
+def staff_list_not_elementary(request):
+    members = StaffMember.objects.get_not_elementary_teachers()
+    return render(request, 'staff_not_elementary.html', {"news": News.objects.all, 'year': timezone.now,
+                                                         "cats": DocumentCategory.objects.get_top_X,
+                                                         "members": members, })
+
+
 @login_required
 def edit(request):
     if request.method == 'POST':
@@ -166,7 +290,7 @@ def edit(request):
     else:
         user = model_to_dict(request.user)
         form = ProfileEditForm(user)
-    return render(request, 'profile_edit.html', {'form': form, 'user': request.user })
+    return render(request, 'profile_edit.html', {'form': form, 'user': request.user, })
 
 
 @login_required

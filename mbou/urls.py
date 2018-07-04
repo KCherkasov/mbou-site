@@ -24,5 +24,40 @@ urlpatterns = [
     url(r'^docs-newest/$', views.docs_newest, name="docs_newest"),
     url(r'^docs-category/(?P<cat_name>.+)/', views.docs_by_category, name="docs_by_category"),
 
+    url(r'^about/main/$', views.about_main, name="about_main"),
+    url(r'^about/docs/$', views.about_docs_all, name="about_docs"),
+    url(r'^about/general/$', views.about_general, name="about_general"),
+    url(r'^about/education/$', views.about_education, name="about_education"),
+    url(r'^about/staff/$', views.about_staff, name="about_staff"),
+    url(r'^about/standards/$', views.about_standards, name="about_standards"),
+    url(r'^about/structure/$', views.about_structure, name="about_structure"),
+    url(r'^about/vacancies/$', views.about_vacancies, name="about_vacancies"),
+    url(r'^about/financial/$', views.about_financial, name="about_financial"),
+    url(r'^about/mto/$', views.about_mto, name="about_mto"),
+    url(r'^about/support/$', views.about_support, name="about_support"),
+    url(r'^about/additional/$', views.about_additional, name="about_additional"),
+    url(r'^about/main_language/$', views.main_language, name="about_language"),
+    url(r'^about/schedules/$', views.about_schedules, name="about_schedules"),
+
+    url(r'^photos/$', views.photos, name="photos"),
+
+    url(r'^annotations/$', views.annotations, name="annotations"),
+
+    url(r'^educational_work/$', views.educational_work, name="educational_work"),
+    url(r'^methodical_work/$', views.methodical, name="methodical_work"),
+    url(r'^educational_programs/$', views.programs, name="educational_programs"),
+    url(r'^credentials/$', views.credentials, name="credentials"),
+    url(r'^council/$', views.council, name="council"),
+    url(r'^vacancies/$', views.vacancies, name="vacancies_docs"),
+    url(r'^additional_education/$', views.about_additional, name="additional_education"),
+    url(r'^regional_contests/$', views.regional_contests, name="regional_contests"),
+    url(r'^school_standard/$', views.school_standard, name="school_standard"),
+    url(r'^curriculum/$', views.curriculum, name="curriculum"),
+
+    url(r'^staff/all/$', views.staff_list_all, name="staff_all"),
+    url(r'^staff/admin/$', views.staff_list_admin, name="staff_admin"),
+    url(r'^staff/elementary/$', views.staff_list_elementary, name="staff_elementary"),
+    url(r'^staff/subjects/$', views.staff_list_not_elementary, name="staff_not_elementary"),
+
     url(r'^admin/', admin.site.urls, name=admin),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

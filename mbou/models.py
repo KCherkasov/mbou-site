@@ -8,6 +8,8 @@ from django.db.models import Count
 from django.urls import reverse
 from django.utils import timezone
 
+from mbou import subjects
+
 
 class News(models.Model):
     title = models.TextField()
@@ -130,3 +132,79 @@ class Document(models.Model):
 
     class Meta:
         ordering = ['-pub_date']
+
+
+class SubjectManager(models.Manager):
+    def get_by_title(self, title):
+        return self.get(title=title)
+
+    def get_or_create(self, title):
+        try:
+            sub_obj = self.get_by_title(title)
+        except Subject.DoesNotExist:
+            sub_obj = self.create(title=title)
+            sub_obj.save()
+        return sub_obj
+
+
+class Subject(models.Model):
+    title = models.TextField()
+
+    objects = SubjectManager()
+
+
+class StafferCategoryManager(models.Manager):
+    def get_by_title(self, title):
+        return self.get(title=title)
+
+    def get_or_create(self, title):
+        try:
+            cat_obj = self.get_by_title(title)
+        except StafferCategory.DoesNotExist:
+            cat_obj = self.create(title=title)
+            cat_obj.save()
+        return cat_obj
+
+
+class StafferCategory(models.Model):
+    title = models.TextField()
+
+    objects = StafferCategoryManager()
+
+
+class StaffMemberQuerySet(models.QuerySet):
+    def with_category(self):
+        return self.prefetch_related('category')
+
+    def with_subject(self):
+        return self.prefetch_related('subject')
+
+
+class StaffMemberManager(models.Manager):
+    def queryset(self):
+        query = StaffMemberQuerySet(self.model, using=self._db)
+        return query.with_category().with_subject()
+
+    def get_chairmen(self):
+        return self.queryset().filter(is_chairman=True)
+
+    def get_elementary_teachers(self):
+        return self.queryset().filter(subject__title=subjects.elementary)
+
+    def get_not_elementary_teachers(self):
+        return self.queryset().all().exclude(subject__title=subjects.elementary)
+
+
+class StaffMember(models.Model):
+    first_name = models.TextField()
+    middle_name = models.TextField()
+    last_name = models.TextField()
+    is_chairman = models.BooleanField(default=False)
+    chair_position = models.TextField(default='')
+    is_combiner = models.BooleanField(default=False)
+    subject = models.ForeignKey(Subject, default=None, on_delete=models.SET_DEFAULT)
+    category = models.ForeignKey(StafferCategory, default=None, on_delete=models.SET_DEFAULT)
+    email = models.EmailField(default='')
+    experience = models.IntegerField(default=0)
+
+    objects = StaffMemberManager()
