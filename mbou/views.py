@@ -10,7 +10,7 @@ from django.utils import timezone
 
 from mbou import categories
 from mbou import miscellaneous
-from mbou.forms import AddNewsForm, LessonTimingForm, DocumentForm, SignInForm, ProfileEditForm
+from mbou.forms import AddNewsForm, LessonTimingForm, DocumentForm, SignInForm, ProfileEditForm, StaffMemberForm
 from mbou.models import News, LessonTiming, Document, DocumentCategory, StaffMember
 
 
@@ -278,6 +278,37 @@ def staff_list_not_elementary(request):
     return render(request, 'staff_not_elementary.html', {"news": News.objects.all, 'year': timezone.now,
                                                          "cats": DocumentCategory.objects.get_top_X,
                                                          "members": members, })
+
+
+def staff_member_add(request):
+    if request.method == 'POST':
+        form = StaffMemberForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('staff_all'))
+    else:
+        form = StaffMemberForm()
+    return render(request, 'staff_member_form_add.html', {"news": News.objects.all, 'year': timezone.now,
+                                                          "cats": DocumentCategory.objects.get_top_X,
+                                                          "form": form, })
+
+
+def staff_member_edit(request, full_name):
+    if request.method == 'POST':
+        form = StaffMemberForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('staff_all'))
+    else:
+        try:
+            staffer = StaffMember.objects.get_by_full_name(full_name=full_name)
+        except StaffMember.DoesNotExist:
+            raise Http404()
+        model = model_to_dict(staffer)
+        form = StaffMemberForm(model)
+    return render(request, 'staff_member_form_edit.html', {"news": News.objects.all, 'year': timezone.now,
+                                                           "cats": DocumentCategory.objects.get_top_X,
+                                                           "form": form, })
 
 
 @login_required

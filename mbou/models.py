@@ -79,7 +79,7 @@ class DocumentCategory(models.Model):
     objects = DocumentCategoryManager()
 
     def get_url(self):
-        return reverse('docs_by_category', kwargs={'cat_name': self.name_id })
+        return reverse('docs_by_category', kwargs={'cat_name': self.name_id})
 
     def __str__(self):
         return '[' + str(self.id) + ']' + self.name
@@ -152,6 +152,9 @@ class Subject(models.Model):
 
     objects = SubjectManager()
 
+    def __str__(self):
+        return self.title
+
 
 class StafferCategoryManager(models.Manager):
     def get_by_title(self, title):
@@ -170,6 +173,9 @@ class StafferCategory(models.Model):
     title = models.TextField()
 
     objects = StafferCategoryManager()
+
+    def __str__(self):
+        return self.title
 
 
 class StaffMemberQuerySet(models.QuerySet):
@@ -194,11 +200,15 @@ class StaffMemberManager(models.Manager):
     def get_not_elementary_teachers(self):
         return self.queryset().all().exclude(subject__title=subjects.elementary)
 
+    def get_by_full_name(self, full_name):
+        return self.queryset().get(full_name=full_name)
+
 
 class StaffMember(models.Model):
     first_name = models.TextField()
     middle_name = models.TextField()
     last_name = models.TextField()
+    full_name = models.TextField(default=u'')
     is_chairman = models.BooleanField(default=False)
     chair_position = models.TextField(default='')
     is_combiner = models.BooleanField(default=False)
@@ -208,3 +218,9 @@ class StaffMember(models.Model):
     experience = models.IntegerField(default=0)
 
     objects = StaffMemberManager()
+
+    def get_full_name(self):
+        return self.first_name + '_' + self.middle_name + '_' + self.last_name
+
+    def get_edit_url(self):
+        return reverse('edit_staff_member', kwargs={'full_name': self.full_name})

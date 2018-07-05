@@ -20,7 +20,7 @@ urlpatterns = [
     url(r'^lessons/show/$', views.lessons_show, name="lessons_show"),
 
     url(r'^documents/add/$', views.document_add, name="document_add"),
-    url(r'^documents/(?P<title>.+)/', views.document_show, name = "document_show"),
+    url(r'^documents/(?P<title>.+)/', views.document_show, name="document_show"),
     url(r'^docs-newest/$', views.docs_newest, name="docs_newest"),
     url(r'^docs-category/(?P<cat_name>.+)/', views.docs_by_category, name="docs_by_category"),
 
@@ -58,6 +58,8 @@ urlpatterns = [
     url(r'^staff/admin/$', views.staff_list_admin, name="staff_admin"),
     url(r'^staff/elementary/$', views.staff_list_elementary, name="staff_elementary"),
     url(r'^staff/subjects/$', views.staff_list_not_elementary, name="staff_not_elementary"),
+    url(r'^staff/add/$', views.staff_member_add, name="add_staff_member"),
+    url(r'^staff/edit/(?P<full_name>.+)/', views.staff_member_edit, name="edit_staff_member"),
 
     url(r'^admin/', admin.site.urls, name=admin),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

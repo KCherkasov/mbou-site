@@ -3,7 +3,7 @@ import re
 from django import forms
 from django.contrib.auth import authenticate
 
-from mbou.models import News, LessonTiming, Document, DocumentCategory
+from mbou.models import News, LessonTiming, Document, DocumentCategory, StaffMember, Subject, StafferCategory
 
 
 class AddNewsForm(forms.ModelForm):
@@ -135,4 +135,53 @@ class ProfileEditForm(forms.Form):
         if password != '':
             user.set_password(password)
         user.save()
+        return self
+
+
+class StaffMemberForm(forms.Form):
+    first_name = forms.CharField(widget=forms.TextInput(
+        attrs={'class': 'form-control', 'placeholder': u'Введите имя', }),
+        max_length=60, label=u'Имя')
+    middle_name = forms.CharField(widget=forms.TextInput(
+        attrs={'class': 'form-control', 'placeholder': u'Введите отчество', }),
+        max_length=60, label=u'Отчество')
+    last_name = forms.CharField(widget=forms.TextInput(
+        attrs={'class': 'form-control', 'placeholder': u'Введите фамилию', }),
+        max_length=60, label=u'Фамилия')
+    is_chairman = forms.BooleanField(widget=forms.CheckboxInput(attrs={'class': 'form-control', }),
+                                     label=u'Является администрацией', initial=False, required=False, )
+    chair_position = forms.CharField(widget=forms.TextInput(
+        attrs={'class': 'form-control', 'placeholder': u'нет'}),
+        label=u'Должность в администрации', empty_value=u'нет')
+    is_combiner = forms.BooleanField(widget=forms.CheckboxInput(attrs={'class': 'form-control', }),
+                                     label=u'Является совместителем', initial=False, required=False, )
+    subject = forms.CharField(widget=forms.TextInput(
+        attrs={'class': 'form-control', 'placeholder': u'Введите предмет'}), label=u'Преподаваемый предмет')
+    category = forms.CharField(widget=forms.TextInput(
+        attrs={'class': 'form-control', 'placeholder': u'Введите категорию'}), label=u'Категория')
+    email = forms.EmailField(widget=forms.TextInput(
+        attrs={'class': 'form-control', 'placeholder': u'email', }),
+        label=u'Электронная почта (необязательно)', empty_value=u'', required=False)
+    experience = forms.IntegerField(widget=forms.NumberInput(attrs={'class': 'form-control', }),
+                                    label=u'Преподавательский стаж', min_value=0, max_value=100)
+
+    def save(self):
+        data = self.cleaned_data
+        staffer = StaffMember()
+        staffer.first_name = data.get('first_name')
+        staffer.middle_name = data.get('middle_name')
+        staffer.last_name = data.get('last_name')
+        staffer.full_name = staffer.get_full_name()
+        staffer.is_chairman = data.get('is_chairman')
+        staffer.chair_position = data.get('chair_position')
+        staffer.is_combiner = data.get('is_combiner')
+        subject_name = data.get('subject')
+        subject = Subject.objects.get_or_create(subject_name)
+        staffer.subject = subject
+        category_name = data.get('category')
+        category = StafferCategory.objects.get_or_create(category_name)
+        staffer.category = category
+        staffer.email = data.get('email')
+        staffer.experience = data.get('experience')
+        staffer.save()
         return self

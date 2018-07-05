@@ -21,6 +21,9 @@
                 <th>Является администрацией(должность)</th>
                 <th>Совместитель</th>
                 <th>Эл.почта</th>
+                {% if not request.user.is_authenticated %}
+                    <th></th>
+                {% endif %}
             </tr>
         </thead>
         <tbody>
@@ -50,6 +53,13 @@
                         <td>
                             <a href="mailto:{{ staff_member.email }}">{{ staff_member.email }}</a>
                         </td>
+                        {% if not request.user.is_authenticated %}
+                            <td>
+                                <a href="{{ staff_member.get_edit_url }}" class="btn btn-primary">
+                                    Редактировать
+                                </a>
+                            </td>
+                        {% endif %}
                     </tr>
                 {% endfor %}
             {% endif %}

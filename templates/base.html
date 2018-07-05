@@ -132,7 +132,7 @@
     <!-- Begin page content -->
     <div class="container content">
       <div class="row">
-      {% if request.user.is_authenticated %}
+      {% if not request.user.is_authenticated %}
         {% block controls %}
           <div class="col-sm-3 col-md-2 sidebar" role="group" aria-label="controls">
              <div class="page-header">
@@ -146,7 +146,7 @@
                <li><a href="{% url 'add_news' %}">Добавить новость</a></li>
                <li><a href="{% url 'edit_lesson' %}">Редактировать звонки</a></li>
                <li><a href="{% url 'document_add' %}">Добавить документ</a></li>
-               <li><a href="#">Добавить педагога</a></li>
+               <li><a href="{% url 'add_staff_member' %}">Добавить педагога</a></li>
              </ul>
           </div>
         {% endblock %}
