@@ -40,7 +40,7 @@
   </head>
 
   <body>
-    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <nav class="navbar navbar-light bg-info navbar-fixed-top" role="navigation">
       {% block navigation %}
       <div class="container">
         <div class="navbar-header">
@@ -130,7 +130,7 @@
     </nav>
 
     <!-- Begin page content -->
-    <div class="container content">
+    <div class="container content bg-light">
       <div class="row">
       {% if not request.user.is_authenticated %}
         {% block controls %}
@@ -161,7 +161,7 @@
     <footer class="footer">
       {% block footer %}
       <div class="container" align = "center">
-        <p class="text-muted">&#169; Все права защищены. 2013-{{ year|date:"Y" }}.</p>
+        <p class="text-muted text-info">&#169; Все права защищены. 2013-{{ year|date:"Y" }}.</p>
       </div>
       {% endblock %}
     </footer>
