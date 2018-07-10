@@ -48,7 +48,9 @@
             {% endfor %}
           </div>
           <div class="document-vote">
-            <span class="document-vote-count text-muted small"> Опубликовано {{ doc.pub_date }} </span>
+            <span class="document-vote-count text-muted small">
+              Опубликовано {{ doc.pub_date }} Просмотров: {{ doc.views_count }}
+            </span>
           </div>
         </div>
       </div>

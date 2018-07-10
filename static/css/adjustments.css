@@ -514,3 +514,25 @@ ul.nav-tabs > li.active > a, ul.nav-tabs > li.active > a:focus {
 .nav > li > a:focus, .nav > li > a:hover, .nav .open > a, .nav .open > a:focus, .nav .open > a:hover {
   background-color: #afd9ee;
 }
+
+.sign-in-form {
+  width: 100%;
+  max-width: 400px;
+  margin-top: 1.2em;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.login-form-error {
+  clear: both;
+}
+
+.signup-form-error {
+  clear: both;
+}
+
+.sign-up-form-userpic-input {
+  margin-top: .5em;
+}
+
+

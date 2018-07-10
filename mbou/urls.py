@@ -61,5 +61,12 @@ urlpatterns = [
     url(r'^staff/add/$', views.staff_member_add, name="add_staff_member"),
     url(r'^staff/edit/(?P<full_name>.+)/', views.staff_member_edit, name="edit_staff_member"),
 
+    url(r'^albums/$', views.albums_list, name="albums_list"),
+    url(r'^albums/?P<album_id>.+/', views.album, name="album"),
+    url(r'^albums/add/$', views.add_album, name="add_album"),
+
+    url(r'photos/add/$', views.add_photo_choice, name="add_photo_choice"),
+    url(r'photos/add/?P<album_id>.+/', views.add_photo_certain, name="add_photo_certain"),
+
     url(r'^admin/', admin.site.urls, name=admin),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -10,8 +10,9 @@ from django.utils import timezone
 
 from mbou import categories
 from mbou import miscellaneous
-from mbou.forms import AddNewsForm, LessonTimingForm, DocumentForm, SignInForm, ProfileEditForm, StaffMemberForm
-from mbou.models import News, LessonTiming, Document, DocumentCategory, StaffMember
+from mbou.forms import AddNewsForm, LessonTimingForm, DocumentForm, SignInForm,\
+    ProfileEditForm, StaffMemberForm, PhotoAddForm, AlbumAddForm
+from mbou.models import News, LessonTiming, Document, DocumentCategory, StaffMember, Photo, Album
 
 
 def index(request):
@@ -26,6 +27,8 @@ def base(request):
 def news(request, id):
     try:
         news_entry = News.objects.get(pk=int(id))
+        news_entry.views_count = news_entry.views_count + 1
+        news_entry.save()
     except News.DoesNotExist:
         raise Http404()
     return render(request, "news_one.html", {"n": news_entry, "news": News.objects.all, "year": timezone.now,
@@ -71,6 +74,8 @@ def lessons_show(request):
 def document_show(request, title):
     try:
         doc = Document.objects.get_by_title(title)
+        doc.views_count = doc.views_count + 1
+        doc.save()
     except Document.DoesNotExist:
         raise Http404()
     doc_namext = re.split('[.]+', doc.doc.name)
@@ -250,7 +255,8 @@ def login(request):
             return HttpResponseRedirect(reverse('login'))
     else:
         form = SignInForm()
-    return render(request, 'login.html', {'form': form, })
+    return render(request, 'login.html', {'news': News.objects.all, 'year': timezone.now,
+                                          'cats': DocumentCategory.objects.get_top_X, 'form': form, })
 
 
 def staff_list_all(request):
@@ -311,6 +317,61 @@ def staff_member_edit(request, full_name):
                                                            "form": form, })
 
 
+def add_photo_certain(request, album_id):
+    if not Album.objects.all:
+        return HttpResponseRedirect(reverse('add_album'))
+    if request.method == 'POST':
+        form = PhotoAddForm(request.POST)
+        if form.is_valid():
+            form.save()
+            if album_id:
+                real_album_id = album_id
+            else:
+                real_album_id = form.cleaned_data['album'].title_id
+            return HttpResponseRedirect(reverse('album', kwargs={'album_id': real_album_id, }))
+    else:
+        form = PhotoAddForm(album_id=album_id)
+        return render(request, 'photo_add.html', {'news': News.objects.all, 'year': timezone.now,
+                                                  'cats': DocumentCategory.objects.get_top_X,
+                                                  'form': form, })
+
+
+def add_photo_choice(request):
+    return add_photo_certain(request, None)
+
+
+def add_album(request):
+    if request.method == 'POST':
+        form = AlbumAddForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('add_album'))
+    else:
+        form = AlbumAddForm()
+        return render(request, 'album_add.html', {'news': News.objects.all, 'year': timezone.now,
+                                                  'cats': DocumentCategory.objects.get_top_X,
+                                                  'form': form, })
+
+
+def albums_list(request):
+    albums = Album.objects.queryset().all()
+    return render(request, 'albums.html', {'news': News.objects.all, 'year': timezone.now,
+                                           'cats': DocumentCategory.objects.get_top_X,
+                                           'albums': albums, })
+
+
+def album(request, album_id):
+    try:
+        album_entry = Album.objects.single(album_id)
+        album_entry.views_count = album_entry.views_count + 1
+        album_entry.save()
+    except Album.DoesNotExist:
+        raise Http404()
+    return render(request, 'album.html', {'news': News.objects.all, 'year': timezone.now,
+                                          'cats': DocumentCategory.objects.get_top_X,
+                                          'album': album_entry, })
+
+
 @login_required
 def edit(request):
     if request.method == 'POST':
@@ -321,7 +382,9 @@ def edit(request):
     else:
         user = model_to_dict(request.user)
         form = ProfileEditForm(user)
-    return render(request, 'profile_edit.html', {'form': form, 'user': request.user, })
+    return render(request, 'profile_edit.html', {'news': News.objects.all, 'year': timezone.now,
+                                                 'cats': DocumentCategory.objects.get_top_X,
+                                                 'form': form, 'user': request.user, })
 
 
 @login_required

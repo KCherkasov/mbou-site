@@ -1,0 +1,36 @@
+{% extends "news.html" %}
+
+{% block title %}
+Фотографии
+{% endblock %}
+
+{% block content %}
+    <div class="page-header">
+        <h1>Фотоальбомы</h1>
+    </div>
+    <hr/>
+    {% if albums %}
+        {% for album in albums %}
+            <div class="document document-{% if forloop.counter|divisibleby:2 %}white{% else %}grey{% endif %}">
+                <div class="document-data">
+                    <div class="document-title">
+                        <a href="{{ album.get_url }}">{{ album.title }}</a>
+                    </div>
+                    <p class="document-text">{{ album.description }}</p>
+                </div>
+                <div class="document-controls">
+                    <div class="document-vote">
+                        <span class="document-vote-count text-muted small">
+                            Опубликовано {{ album.pub_date }} Просмотров: {{ album.views_count }} Фотографий: {{ album.photos_count }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+        <div class="paginator-block" align="center">
+            {% include 'paginator.html' with objects=albums %}
+        </div>
+    {% else %}
+        <h3 class="text-center">Пока не добавлено ни одного альбома</h3>
+    {% endif %}
+{% endblock %}

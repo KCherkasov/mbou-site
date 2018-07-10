@@ -1,0 +1,51 @@
+{% extends "news.html" %}
+
+{% block title %}
+Альбом {{ album.title }}
+{% endblock %}
+
+{% block content %}
+    <div class="page-header">
+        <h1>Альбом {{ album.title }}</h1>
+    </div>
+    <hr/>
+    {% if album.photo_set.all %}
+    <div id="albumPhotosCarousel" class="carousel slide" data-ride="carousel">
+        <ol class="carousel-indicators">
+            {% for photos in album.photo_set.all %}
+                <li data-target="#albumPhotosCarousel" data-slide-to="{{ forloop.counter }}" {% if forloop.first %}class="active"{% endif %}></li>
+            {% endfor %}
+        </ol>
+        <div class="carousel-inner">
+            {% for photo in album.photo_set.all %}
+                <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                    <img class="d-block w-100" src="{{ photo.photo_url }}" alt="{{ photo.description }}"/>
+                    <div class="carousel-caption d-none d-md-block">
+                        <h5>{{ photo.label }}</h5>
+                        <p>{{ photo.description }}</p>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <a class="carousel-control-prev" href="#albumPhotosCarousel" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+        </a>
+        <a class="carousel-control-next" href="#albumPhotosCarousel" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+        </a>
+    </div>
+    {% else %}
+        <p class="lead">Похоже, пока не загружено ни одной фотографии.</p>
+        {% if not request.user.is_authenticated %}
+            <a class="btn btn-primary" role="button" href="{{ album.add_photo_url }}">Добавить фотографии</a>
+        {% else %}
+            <p>Попробуйте заглянуть сюда немного позднее!</p>
+        {% endif %}
+    {% endif %}
+    <span class="divider" role="separator"></span>
+    <p class="text-muted">
+        Опубликовано {{ album.pub_date }} Просмотров: {{ album.views_count }} Фотографий: {{ album.photos_count }}
+    </p>
+{% endblock %}

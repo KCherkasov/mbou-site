@@ -3,7 +3,8 @@ import re
 from django import forms
 from django.contrib.auth import authenticate
 
-from mbou.models import News, LessonTiming, Document, DocumentCategory, StaffMember, Subject, StafferCategory
+from mbou.models import News, LessonTiming, Document, DocumentCategory,\
+    StaffMember, Subject, StafferCategory, Photo, Album
 
 
 class AddNewsForm(forms.ModelForm):
@@ -167,21 +168,58 @@ class StaffMemberForm(forms.Form):
 
     def save(self):
         data = self.cleaned_data
-        staffer = StaffMember()
-        staffer.first_name = data.get('first_name')
-        staffer.middle_name = data.get('middle_name')
-        staffer.last_name = data.get('last_name')
-        staffer.full_name = staffer.get_full_name()
-        staffer.is_chairman = data.get('is_chairman')
-        staffer.chair_position = data.get('chair_position')
-        staffer.is_combiner = data.get('is_combiner')
-        subject_name = data.get('subject')
-        subject = Subject.objects.get_or_create(subject_name)
-        staffer.subject = subject
-        category_name = data.get('category')
-        category = StafferCategory.objects.get_or_create(category_name)
-        staffer.category = category
-        staffer.email = data.get('email')
-        staffer.experience = data.get('experience')
-        staffer.save()
+        StaffMember().add_or_update(data.get('first_name'), data.get('middle_name'), data.get('last_name'),
+                                    data.get('is_chairman'), data.get('chair_position'),
+                                    data.get('is_combiner'), data.get('subject'), data.get('category'),
+                                    data.get('email'), data.get('experience'))
         return self
+
+
+class AlbumAddForm(forms.Form):
+    title = forms.CharField(widget=forms.TextInput(
+      attrs={'class': 'form-control', 'placeholder': u'Название альбома', }),
+      label=u'Название альбома', max_length=60)
+    description = forms.CharField(widget=forms.Textarea(
+        attrs={'class': 'form-control', 'rows': 3, 'placeholder': u'Краткое описание альбома (необязательно)', }),
+        label=u'Описание альбома', required=False, empty_value=u'')
+
+    def save(self):
+        data = self.cleaned_data
+        album = Album()
+        album.title = data.get('title')
+        album.title_id = album.make_title_id()
+        album.description = data.get('description')
+        album.save()
+        return self
+
+
+class PhotoAddForm(forms.Form):
+    label = forms.CharField(widget=forms.TextInput(
+      attrs={'class': 'form-control', 'placeholder': u'Название фотографии', }),
+      label=u'Название фотографии', max_length=60, required=False, empty_value=u'')
+    description = forms.CharField(widget=forms.Textarea(
+      attrs={'class': 'form-control', 'rows': 3, 'placeholder': u'Краткое описание фотографии (необязательно)', }),
+      label=u'Описание фотографии', required=False, empty_value=u'')
+    photo = forms.FileField(widget=forms.ImageField(label=u'Файл'))
+    album = forms.ModelChoiceField(queryset=Album.objects.all())
+
+    def __init__(self, *args, **kwargs):
+        album_id = kwargs.pop('album_id', None)
+        super(PhotoAddForm, self).__init__(*args, **kwargs)
+        if album_id:
+            self.fields['album'].queryset = Album.objects.filter(pk=album_id)
+
+    def save(self):
+        data = self.cleaned_data
+        photo = Photo()
+        photo.label = data.get('label')
+        photo.description = data.get('description')
+        photo.save()
+        if data.get('photo') is not None:
+            photo_file = data.get('photo')
+            photo_namext = re.split('[.]+', photo_file.name)
+            photo.photo.save('%s_%s.%s' % (photo_namext[0], str(photo.id), photo_namext[1]), photo_file, save=True)
+        photo.save()
+        album = data.get('album')
+        album.photo_set.add(photo)
+        return photo

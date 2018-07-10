@@ -14,7 +14,8 @@ from mbou import subjects
 class News(models.Model):
     title = models.TextField()
     content = models.TextField()
-    pub_date = models.DateTimeField(default = timezone.now)
+    pub_date = models.DateTimeField(default=timezone.now)
+    views_count = models.PositiveIntegerField(default=0)
 
     def get_by_title(self, title):
         return self.get(title=title)
@@ -27,6 +28,9 @@ class News(models.Model):
 
     def get_url(self):
         return reverse('news', kwargs={'id': self.id, })
+
+    class Meta:
+        ordering = ['-pub_date', '-views_count']
 
 
 class LessonTiming(models.Model):
@@ -58,7 +62,7 @@ class DocumentCategoryManager(models.Manager):
             cat_obj.save()
         return cat_obj
 
-    def get_top_X(self, top_size = 5):
+    def get_top_X(self, top_size=5):
         real_top = top_size
         return self.order_by_doc_count().all()[:real_top]
 
@@ -115,6 +119,7 @@ class Document(models.Model):
     doc = models.FileField(upload_to="docs")
     pub_date = models.DateTimeField(default=timezone.now)
     categories = models.ManyToManyField(DocumentCategory)
+    views_count = models.IntegerField(default=0)
 
     objects = DocumentManager()
 
@@ -131,7 +136,7 @@ class Document(models.Model):
         return re.sub(' +', '_', self.title)
 
     class Meta:
-        ordering = ['-pub_date']
+        ordering = ['-pub_date', '-views_count']
 
 
 class SubjectManager(models.Manager):
@@ -224,3 +229,86 @@ class StaffMember(models.Model):
 
     def get_edit_url(self):
         return reverse('edit_staff_member', kwargs={'full_name': self.full_name})
+
+    @staticmethod
+    def add_or_update(first_name, middle_name, last_name, is_chairman, chair_position,
+                      is_combiner, subject, category, email, experience):
+        new_full_name = first_name + '_' + middle_name + '_' + last_name
+        new_subject = Subject.objects.get_or_create(subject)
+        new_category = StafferCategory.objects.get_or_create(category)
+        old, new = StaffMember.objects.update_or_create(full_name=new_full_name,
+                                                        defaults={'first_name': first_name, 'middle_name': middle_name,
+                                                                  'last_name': last_name, 'full_name': new_full_name,
+                                                                  'is_chairman': is_chairman,
+                                                                  'chair_position': chair_position,
+                                                                  'is_combiner': is_combiner, 'subject': new_subject,
+                                                                  'category': new_category, 'email': email,
+                                                                  'experience': experience})
+        return new
+
+
+class AlbumQueryset(models.QuerySet):
+    def with_photos(self):
+        query = self.prefetch_related('photo_set')
+        return query
+
+    def with_photos_count(self):
+        return self.annotate(photos_count=Count('photos__id', distinct=True))
+
+
+class AlbumManager(models.Manager):
+    def queryset(self):
+        queryset = AlbumQueryset(self.model, using=self._db)
+        return queryset.with_photos_count()
+
+    def single(self, title_id):
+        return self.queryset().with_photos().get(pk=title_id)
+
+
+class Album(models.Model):
+    title = models.TextField(max_length=60, default=u'')
+    title_id = models.TextField(max_length=70, default=u'', primary_key=True)
+    description = models.TextField(max_length=360, default=u'')
+    pub_date = models.DateTimeField(default=timezone.now)
+    photos_count = models.PositiveIntegerField(default=0)
+    views_count = models.PositiveIntegerField(default=0)
+
+    objects = AlbumManager()
+
+    def __str__(self):
+        return self.title
+
+    def make_title_id(self):
+        return re.sub(' +', '_', self.title)
+
+    def get_url(self):
+        return reverse('albums', kwargs={'album_id': self.title_id, })
+
+    def photo_add_url(self):
+        return reverse('add_photo_certain', kwargs={'album_id': self.title_id, })
+
+    class Meta:
+        ordering = ['-pub_date', '-views_count']
+
+
+class Photo(models.Model):
+    label = models.TextField(max_length=60, default=u'')
+    description = models.TextField(max_length=360, default=u'')
+    photo = models.ImageField(upload_to='photos')
+    pub_date = models.DateTimeField(default=timezone.now)
+    album = models.ForeignKey(Album, default=None, on_delete=models.SET_DEFAULT)
+
+    def __str__(self):
+        return self.label
+
+    def get_by_id(self, id):
+        return self.get(id=id)
+
+    def photo_url(self):
+        if self.photo and hasattr(self.photo, "url"):
+            return self.photo.url
+        else:
+            return None
+
+    class Meta:
+        ordering = ['-pub_date']
