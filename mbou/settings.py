@@ -15,11 +15,12 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', '6og5)7nlck!@87*_n#6*fmm9dl=hyp
 # DEBUG = True
 DEBUG = bool(os.environ.get('DJANGO_DEBUG', True))
 
-ALLOWED_HOSTS = ['127.0.0.1']
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
 INSTALLED_APPS = [
+    'mbou',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -28,7 +29,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
     'django.contrib.sitemaps',
-    'mbou',
 ]
 
 MIDDLEWARE = [
@@ -109,20 +109,25 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
+STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'), )
+
 STATIC_URL = '/static/'
-if not DEBUG:
-    STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
-else:
-    STATIC_ROOT = ''
-    STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
+STATIC_ROOT = '/var/www/sosh7-lobnya.ru/static'
 
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 )
 
+MEDIAFILES_DIRS = (os.path.join(BASE_DIR, 'media'), )
+
+MEDIAFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+)
+
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+MEDIA_ROOT = '/var/www/sosh7-lobnya.ru/media'
 
 # SECURE_HSTS_SECONDS = 3600
 # SECURE_HSTS_PRELOAD = True
@@ -137,5 +142,4 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
 # Simplified static file serving.
 # https://warehouse.python.org/project/whitenoise/
-if not DEBUG:
-    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+# STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
