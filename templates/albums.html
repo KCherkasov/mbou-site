@@ -6,27 +6,29 @@
 
 {% block content %}
     <div class="page-header">
-        <h1>Фотоальбомы</h1>
+        <h1 class="text-center">Фотоальбомы</h1>
     </div>
     <hr/>
     {% if albums %}
+        <div class="card-group">
         {% for album in albums %}
-            <div class="document document-{% if forloop.counter|divisibleby:2 %}white{% else %}grey{% endif %}">
-                <div class="document-data">
-                    <div class="document-title">
-                        <a href="{{ album.get_url }}">{{ album.title }}</a>
-                    </div>
-                    <p class="document-text">{{ album.description }}</p>
+            <div class="card document-{% if forloop.counter|divisibleby:2 %}white{% else %}grey{% endif %}">
+                <div class="card-header">
+                    <h5 class="document-title text-center">
+                        <a href="{{ album.get_url }}" class="card-link">{{ album.title }}</a>
+                    </h5>
                 </div>
-                <div class="document-controls">
-                    <div class="document-vote">
-                        <span class="document-vote-count text-muted small">
-                            Опубликовано {{ album.pub_date }} Просмотров: {{ album.views_count }} Фотографий: {{ album.photos_count }}
-                        </span>
-                    </div>
+                <div class="card-body">
+                    <p class="card-text text-center">{{ album.description }}</p>
+                </div>
+                <div class="card-footer">
+                    <h6 class="document-vote-count text-muted small text-center">
+                        Опубликовано {{ album.pub_date }} Просмотров: {{ album.views_count }} Фотографий: {{ album.photos_count }}
+                    </h6>
                 </div>
             </div>
         {% endfor %}
+        </div>
         <div class="paginator-block" align="center">
             {% include 'paginator.html' with objects=albums %}
         </div>

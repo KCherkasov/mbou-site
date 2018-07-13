@@ -5,6 +5,10 @@
 {% block page_title %}Вход{% endblock %}
 
 {% block content %}
+  <div class="page-header text-center">
+    <h1>Авторизация</h1>
+  </div>
+  <hr/>
   {% for err in form.non_field_errors %}
     <div class="login-form-error">
       <div class="alert alert-danger" role="alert">

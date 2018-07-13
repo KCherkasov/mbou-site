@@ -1,10 +1,10 @@
-﻿<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="ru">
   <head>
     {% block meta %}
 
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Type" content="text/html">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <meta name="description" content="официальный сайт МБОУ СОШ №7 г.Лобня">
@@ -18,8 +18,7 @@
     {% load static %}
 
     {% block styles %}
-
-    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link href="{% static 'css/ie10-viewport-bug-workaround.css' %}" rel="stylesheet">
     <link href="{% static 'css/sticky-footer-navbar.css' %}" rel="stylesheet">
     <link href="{% static 'css/dashboard.css' %}" rel="stylesheet">
@@ -40,127 +39,183 @@
   </head>
 
   <body>
-    <nav class="navbar navbar-light bg-info navbar-fixed-top" role="navigation">
+    <nav class="navbar navbar-expand-lg navbar-light alert-primary navbar-fixed-top" role="navigation">
       {% block navigation %}
-      <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <p class="navbar-text"><a class="navbar-brand" href="{% url 'index' %}"><img src="{{ MEDIA_URL }}/pics/mbou-7_300_25p.gif" width="110px" height="110px"> МБОУ СОШ №7</a></p>
-        </div>
+        <a class="navbar-brand text-primary mb-0" href="{% url 'index' %}">
+            <img src="{{ MEDIA_URL }}/pics/mbou-7_300_25p.gif" width="110px" height="110px" class="d-inline-block align-top">
+            МБОУ СОШ №7
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+        </button>
         <div id="navbar" class="collapse navbar-collapse">
-          <ul class="nav navbar-nav navbar-left navbar-text lead">
-            <li class="dropdown"><a href="#"{%block news_styles%}{% endblock %}>Новости <span class="caret"></span></a> {% block news %}{% endblock %}</li>
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">О школе <span class="caret"></span></a>
-              <ul class="dropdown-menu">
-                <li><a href="{% url 'about_main' %}">Сведения об образовательной органищации</a></li>
-                <li><a href="{% url 'curriculum' %}">Годовой календарный учебный план</a></li>
-                <li role="separator" class="divider"></li>
-                <li><a href="#">История школы</a></li>
-                <li role="separator" class="divider"></li>
-                <li><a href="#">Символика школы</a></li>
-                <li role="separator" class="divider"></li>
-                <li><a href="{% url 'school_standard' %}">Стандарт оформления образовательной организации</a></li>
-                <li role="separator" class="divider"></li>
-                <li><a href="{% url 'regional_contests' %}">Участие в региональных конкурсах</a></li>
-              </ul>
+          <ul class="navbar-nav navbar-mr-auto">
+            <li class="nav-item dropdown"><a href="#"{%block news_styles%}{% endblock %}>Новости <span class="caret"></span></a> {% block news %}{% endblock %}</li>
+            <li class="nav-item dropdown">
+              <a href="#" class="dropdown-toggle" id="aboutSchool" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">О школе <span class="caret"></span></a>
+              <div class="dropdown-menu" aria-labelledby="aboutSchool">
+                <a href="{% url 'curriculum' %}" class="dropdown-item">Годовой календарный учебный план</a>
+                <div class="dropdown-divider"></div>
+                <a href="#" class="dropdown-item">История школы</a>
+                <div class="dropdown-divider"></div>
+                <a href="#" class="dropdown-item">Символика школы</a>
+                <div class="dropdown-divider"></div>
+                <a href="{% url 'school_standard' %}" class="nav-link">
+                    Cтандарт оформления образовательной организации
+                </a>
+                <div class="dropdown-divider"></div>
+                <a href="{% url 'regional_contests' %}" class="dropdown-item">Участие в региональных конкурсах</a>
+                <div class="dropdown-divider"></div>
+                <a href="{% url 'albums_list' %}" class="dropdown-item">Фотогалереи</a>
+              </div>
             </li>
             <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Расписание <span class="caret"></span></a>
-              <ul class="dropdown-menu">
-                <li class="dropdown-header">Звонки</li>
-                <li role="separator" class="divider"></li>
-                <li><a href="{% url 'lessons_show' %}">Расписание звонков</a></li>
-              </ul>
+              <a href="#" class="dropdown-toggle" id="aboutOrganization" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                  Сведения об обр. организации<span class="caret"></span>
+              </a>
+              <div class="dropdown-menu" aria-labelledby="aboutOrganization">
+                <h6 class="dropdown-header">Сведения об образовательной организации</h6>
+                <div class="dropdown-divider"></div>
+                <a href="{% url 'about_main' %}" class="dropdown-item">Главная</a>
+                <a href="{% url 'about_general' %}" class="dropdown-item">Основные сведения</a>
+                <a href="{% url 'about_structure' %}" class="dropdown-item">
+                  Структура и органы управления образовательной организацией
+                </a>
+                <a href="{% url 'about_docs' %}" class="dropdown-item">Документы</a>
+                <a href="{% url 'about_education' %}" class="dropdown-item">Образование</a>
+                <a href="{% url 'about_standards' %}" class="dropdown-item">Образовательные стандарты</a>
+                <a href="{% url 'about_staff' %}" class="dropdown-item">Руководство. Педагогический состав</a>
+                <a href="{% url 'about_mto' %}" class="dropdown-item">
+                  Материально-техническое обеспечение и оснащенность образовательного процесса
+                </a>
+                <a href="{% url 'about_support' %}" class="dropdown-item">
+                    Стипендии и иные виды материальной поддержки
+                </a>
+                <a href="{% url 'about_additional' %}" class="dropdown-item">Платные образовательные услуги</a>
+                <a href="{% url 'about_financial' %}" class="dropdown-item">Финансово-хозяйственная деятельность</a>
+                <a href="{% url 'about_vacancies' %}" class="dropdown-item">Вакантные места для приема(перевода)</a>
+              </div>
             </li>
             <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Документы <span class="caret"></span></a>
-              <ul class="dropdown-menu">
-                <li class="dropdown-header">Категории</li>
-                <li role="separator" class="divider"></li>
+              <a href="#" class="dropdown-toggle" id="docsDropdown" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Документы <span class="caret"></span></a>
+              <div class="dropdown-menu" aria-labelledby="docsDropdown">
+                <h6 class="dropdown-header">Категории</h6>
+                <div class="dropdown-divider"></div>
                 {% if cats %}
                   {% for category in cats %}
-                    <li><a href="{{ category.get_url }}">{{ category.name }}</a></li>
+                    <a href="{{ category.get_url }}" class="dropdown-item">{{ category.name }}</a>
                   {% endfor %}
-                  <li role="separator" class="divider"></li>
+                  <div class="dropdown-divider"></div>
                 {% endif %}
-                  <li class="dropdown-header"><a href="{% url 'docs_newest' %}">Все документы</a></li>
-              </ul>
+                  <h6 class="dropdown-header"><a href="{% url 'docs_newest' %}">Все документы</a></h6>
+              </div>
             </li>
             <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Коллектив <span class="caret"></span></a>
-              <ul class="dropdown-menu">
-                <li><a href="{% url 'staff_admin' %}">Администрация</a></li>
-                <li role="separator" class="divider"></li>
-                <li class="dropdown-header"><a href="{% url 'staff_all' %}">Педагоги</a></li>
-                <li><a href="{% url 'staff_elementary' %}">Начальная школа</a></li>
-                <li><a href="{% url 'staff_not_elementary' %}">Старшие классы</a></li>
-              </ul>
+              <a href="#" class="dropdown-toggle" id="staffDropdown" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Коллектив <span class="caret"></span></a>
+              <div class="dropdown-menu" aria-labelledby="staffDropdown">
+                <a href="{% url 'staff_admin' %}" class="dropdown-item">Администрация</a>
+                <div class="dropdown-divider"></div>
+                <h6 class="dropdown-header"><a href="{% url 'staff_all' %}">Педагоги</a></h6>
+                <a href="{% url 'staff_elementary' %}" class="dropdown-item">Начальная школа</a>
+                <a href="{% url 'staff_not_elementary' %}" class="dropdown-item">Старшие классы</a>
+              </div>
             </li>
             <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Учебный процесс <span class="caret"></span></a>
-              <ul class="dropdown-menu">
-                <li><a href="{% url 'curriculum' %}">Учебный план</a></li>
-                <li role="separator" class="divider"></li>
-                <li><a href="{% url 'additional_education' %}">Дополнительное образование</a></li>
-                <li role="separator" class="divider"></li>
-                <li class="dropdown-header">Этапы обучения</li>
-                <li><a href="#">Начальные классы</a></li>
-                <li><a href="#">Средняя школа</a></li>
-                <li><a href="#">Старшая школа</a></li>
-                <li role="separator" class="divider"></li>
-                <li class="dropdown-header">Экзамены</li>
-                <li><a href="#">ЕГЭ</a></li>
-                <li><a href="#">ГИА</a></li>
-                <li role="separator" class="divider"></li>
-                <li><a href="{% url 'methodical_work' %}">Методическая работа</a></li>
-                <li role="separator" class="divider"></li>
-                <li><a href="#">Электронные сервисы</a></li>
-              </ul>
+              <a href="#" class="dropdown-toggle" id="studyDropdown" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Учебный процесс <span class="caret"></span></a>
+              <div class="dropdown-menu" aria-labelledby="studyDropdown">
+                <a href="{% url 'curriculum' %}" class="dropdown-item">Учебный план</a>
+                <div class="dropdown-divider"></div>
+                <a href="{% url 'additional_education' %}" class="dropdown-item">Дополнительное образование</a>
+                <div class="dropdown-divider"></div>
+                <h6 class="dropdown-header">Этапы обучения</h6>
+                <a href="#" class="dropdown-item">Начальные классы</a>
+                <a href="#" class="dropdown-item">Средняя школа</a>
+                <a href="#" class="dropdown-item">Старшая школа</a>
+                <div class="dropdown-divider"></div>
+                <h6 class="dropdown-header">Экзамены</h6>
+                <a href="#" class="dropdown-item">ЕГЭ</a>
+                <a href="#" class="dropdown-item">ГИА</a>
+                <div class="dropdown-divider"></div>
+                <a href="{% url 'methodical_work' %}" class="dropdown-item">Методическая работа</a>
+                <div class="divider"></div>
+                <a href="#" class="dropdown-item">Электронные сервисы</a>
+              </div>
             </li>
           </ul>
-        </div><!--/.nav-collapse -->
-      </div>
+        </div>
       {% endblock %}
     </nav>
 
     <!-- Begin page content -->
-    <div class="container content bg-light">
+    <div class="container-fluid content bg-white">
       <div class="row">
-      {% if not request.user.is_authenticated %}
+      {% if request.user.is_authenticated %}
         {% block controls %}
-          <div class="col-sm-3 col-md-2 sidebar" role="group" aria-label="controls">
+          <nav class="col-sm-3 col-md-2 sidebar" role="group" aria-label="controls">
              <div class="page-header">
-               <h5 class="text-center">Панель управления</h5>
-               <h5 class="text-center">Здравствуйте, {{ request.user.first_name }}!</h5>
+               <h6 class="text-center">Панель управления</h6>
+               <h6 class="text-center">Здравствуйте, {{ request.user.get_full_name }}!</h6>
              </div>
-             <ul class="nav nav-sidebar">
-               <li><a href="{% url 'profile-edit' %}">Редактировать профиль</a></li>
-               <li><a href="{% url 'logout' %}">Выйти</a></li>
-               <li><span class="separator" role="divider"></span></li>
-               <li><a href="{% url 'add_news' %}">Добавить новость</a></li>
-               <li><a href="{% url 'edit_lesson' %}">Редактировать звонки</a></li>
-               <li><a href="{% url 'document_add' %}">Добавить документ</a></li>
-               <li><a href="{% url 'add_staff_member' %}">Добавить педагога</a></li>
-               <li><a href="{% url 'add_album' %}">Создать фотоальбом</a></li>
-               <li><a href="{% url 'add_photo_choice' %}">Добавить фотографию</a></li>
+             <ul class="nav flex-column">
+               <li class="nav-item">
+                   <a href="{% url 'profile-edit' %}" class="nav-link">
+                       Редактировать профиль
+                   </a>
+               </li>
+               <li class="nav-item">
+                   <a href="{% url 'logout' %}" class="nav-link">
+                       Выйти
+                   </a>
+               </li>
+               <li class="nav-item">
+                   <span class="separator" role="divider"></span>
+               </li>
+               <li class="nav-item">
+                   <a href="{% url 'add_news' %}" class="nav-link">
+                       Добавить новость
+                   </a>
+               </li>
+               <li class="nav-item">
+                   <a href="{% url 'document_add' %}" class="nav-link">
+                       Добавить документ
+                   </a>
+               </li>
+               <li class="nav-item">
+                   <a href="{% url 'add_staff_member' %}" class="nav-link">
+                       Добавить педагога
+                   </a>
+               </li>
+               <li class="nav-item">
+                   <a href="{% url 'add_album' %}" class="nav-link">
+                       Создать фотоальбом
+                   </a>
+               </li>
+               <li class="nav-item">
+                   <a href="{% url 'add_photo_choice' %}" class="nav-link">
+                       Добавить фотографию
+                   </a>
+               </li>
+               <li class="nav-item">
+                 <a href="{% url 'user_management' %}" class="nav-link">
+                  {% if request.user.is_superuser %}
+                    Управление пользователями
+                  {% else %}
+                    Список пользователей
+                  {% endif %}
+                 </a>
+               </li>
              </ul>
-          </div>
+          </nav>
         {% endblock %}
       {% endif %}
-        <div class=" col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+        <main class="{% if user.is_authenticated %}col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2{%else%}w-100{% endif %} main clearfix">
           {% block content %}
           {% endblock %}
-        </div>
+        </main>
       </div>
     </div>
 
-    <footer class="footer">
+    <footer class="footer bg-white">
       {% block footer %}
       <div class="container" align = "center">
         <p class="text-muted text-info">&#169; Все права защищены. 2013-{{ year|date:"Y" }}.</p>
@@ -171,9 +226,10 @@
 
     {% block scripts %}
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     {% endblock %}
   </body>
 </html>

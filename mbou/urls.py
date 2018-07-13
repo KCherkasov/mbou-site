@@ -9,7 +9,6 @@ urlpatterns = [
     url(r'^index/', views.index, name="index"),
     url(r'^base/', views.base, name="base"),
 
-    url(r'^mbou7-staff-login/', views.login, name="login"),
     url(r'^logout/', views.logout, name="logout"),
     url(r'^edit/', views.edit, name="profile-edit"),
 
@@ -62,11 +61,17 @@ urlpatterns = [
     url(r'^staff/edit/(?P<full_name>.+)/', views.staff_member_edit, name="edit_staff_member"),
 
     url(r'^albums/$', views.albums_list, name="albums_list"),
-    url(r'^albums/?P<album_id>.+/', views.album, name="album"),
     url(r'^albums/add/$', views.add_album, name="add_album"),
+    url(r'^albums/photos/(?P<album_id>.+)/', views.album, name="album"),
 
-    url(r'photos/add/$', views.add_photo_choice, name="add_photo_choice"),
-    url(r'photos/add/?P<album_id>.+/', views.add_photo_certain, name="add_photo_certain"),
+    url(r'^photos/add/$', views.add_photo_choice, name="add_photo_choice"),
+    url(r'^photos/add/(?P<album_id>.+)/', views.add_photo_certain, name="add_photo_certain"),
+
+    url(r'^users-list/$', views.user_management, name="user_management"),
+    url(r'^users/add/$', views.add_user, name="add_user"),
+    url(r'^users/edit/(?P<username>.+)/', views.edit_user_by_username, name="profile_edit_super"),
+    url(r'^users/delete/(?P<username>.+)/', views.delete_user, name="profile_delete"),
+    url(r'^staff/login/', views.login, name="login"),
 
     url(r'^admin/', admin.site.urls, name=admin),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

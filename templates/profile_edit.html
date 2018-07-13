@@ -2,9 +2,13 @@
 
 {% block title %}Настройки профиля{% endblock %}
 
-{% block page_title %}Настройки профиля{% endblock %}
+{% block page_title %}Настройки профиля пользователя {{ user.get_full_name }}{% endblock %}
 
 {% block content %}
+  <div class="page-header text-center">
+    <h1>Настройки профиля пользователя &nbsp;{{ user.get_full_name }}</h1>
+  </div>
+  <hr/>
   {% for err in form.non_field_errors %}
     <div class="signup-form-error">
       <div class="alert alert-danger" role="alert">

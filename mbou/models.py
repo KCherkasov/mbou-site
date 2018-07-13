@@ -2,6 +2,7 @@
 import re
 from random import choice
 
+from django.contrib.auth.models import User
 from django.core import validators
 from django.db import models
 from django.db.models import Count
@@ -253,7 +254,7 @@ class AlbumQueryset(models.QuerySet):
         return query
 
     def with_photos_count(self):
-        return self.annotate(photos_count=Count('photos__id', distinct=True))
+        return self.annotate(photos_count=Count('photo__id', distinct=True))
 
 
 class AlbumManager(models.Manager):
@@ -270,7 +271,6 @@ class Album(models.Model):
     title_id = models.TextField(max_length=70, default=u'', primary_key=True)
     description = models.TextField(max_length=360, default=u'')
     pub_date = models.DateTimeField(default=timezone.now)
-    photos_count = models.PositiveIntegerField(default=0)
     views_count = models.PositiveIntegerField(default=0)
 
     objects = AlbumManager()
@@ -282,7 +282,7 @@ class Album(models.Model):
         return re.sub(' +', '_', self.title)
 
     def get_url(self):
-        return reverse('albums', kwargs={'album_id': self.title_id, })
+        return reverse('album', kwargs={'album_id': self.title_id, })
 
     def photo_add_url(self):
         return reverse('add_photo_certain', kwargs={'album_id': self.title_id, })
@@ -312,3 +312,14 @@ class Photo(models.Model):
 
     class Meta:
         ordering = ['-pub_date']
+
+
+class UrlUser(User):
+    class Meta:
+        proxy = True
+
+    def get_edit_url(self):
+        return reverse('profile_edit_super', kwargs={'username': self.username})
+
+    def get_delete_url(self):
+        return reverse('profile_delete', kwargs={'username': self.username})

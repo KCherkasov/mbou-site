@@ -6,22 +6,22 @@
 
 {% block content %}
     <div class="page-header">
-        <h2>Коллектив школы: {% block content_subtitle %}{% endblock %}</h2>
+        <h2 class="text-center">Коллектив школы: {% block content_subtitle %}{% endblock %}</h2>
     </div>
     <hr/>
     <table class="table table-striped table-hover">
-        <thead class="bg-primary">
+        <thead class="bg-primary text-white">
             <tr>
-                <th>Фамилия</th>
-                <th>Имя</th>
-                <th>Отчество</th>
-                <th>Стаж, лет</th>
-                <th>Категория</th>
-                <th>Предмет</th>
-                <th>Является администрацией(должность)</th>
-                <th>Совместитель</th>
-                <th>Эл.почта</th>
-                {% if not request.user.is_authenticated %}
+                <th class="text-center">Фамилия</th>
+                <th class="text-center">Имя</th>
+                <th class="text-center">Отчество</th>
+                <th class="text-center">Стаж, лет</th>
+                <th class="text-center">Категория</th>
+                <th class="text-center">Предмет</th>
+                <th class="text-center">Является администрацией(должность)</th>
+                <th class="text-center">Совместитель</th>
+                <th class="text-center">Эл.почта</th>
+                {% if request.user.is_authenticated %}
                     <th></th>
                 {% endif %}
             </tr>
@@ -53,7 +53,7 @@
                         <td>
                             <a href="mailto:{{ staff_member.email }}">{{ staff_member.email }}</a>
                         </td>
-                        {% if not request.user.is_authenticated %}
+                        {% if request.user.is_authenticated %}
                             <td>
                                 <a href="{{ staff_member.get_edit_url }}" class="btn btn-primary">
                                     Редактировать

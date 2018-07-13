@@ -5,15 +5,15 @@
 {% endblock %}
 
 {% block news_styles %}
-  class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
+  class="dropdown-toggle" id="newsDropdown" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
 {% endblock %}
 
 {% block news %}
   {% if news %}
-  <ul class="dropdown-menu">
+  <div class="dropdown-menu" aria-labelledby="newsDropdown">
     {% for ne in news %}
-      <li><a href="{{ ne.get_url }}">{{ ne.title }}</a></li>
+      <a href="{{ ne.get_url }}" class="dropdown-item">{{ ne.title }}</a>
     {% endfor %}
-  </ul>
+  </div>
   {% endif %}
 {% endblock %}

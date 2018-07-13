@@ -1,0 +1,65 @@
+{% extends "news.html" %}
+
+{% block title %}
+    {% if request.user.is_superuser %}
+        Управление пользователями
+    {% else %}
+        Список авторизованных пользователей
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    <div class="page-header">
+        <h1 class="text-center">
+            {% if request.user.is_super_user %}
+                Управление авторизованными пользователями
+            {% else %}
+                Список авторизованных пользователей
+            {% endif %}
+        </h1>
+    </div>
+    <hr/>
+    <table class="table table-striped table-hover">
+        <thead class="bg-primary text-white">
+            <tr>
+                <th>Фамилия Имя Отчество</th>
+                <th>Электронная почта</th>
+                <th>Дата добавления</th>
+                <th>Последний вход на сайт</th>
+                {% if request.user.is_superuser %}
+                    <th></th>
+                    <th></th>
+                {% endif %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in user_list %}
+                {% if user.is_active or user.is_superuser %}
+                    <tr>
+                        <td>{{ user.get_full_name }}</td>
+                        <td><a href="mailto:{{ user.email }}">{{ user.email }}</a></td>
+                        <td>{{ user.date_joined }}</td>
+                        <td>{{ user.last_login }}</td>
+                        {% if user == request.user or request.user.is_superuser %}
+                            <td>
+                                <a href="{{ user.get_edit_url }}" class="btn btn-primary" role="button">
+                                    Редактировать
+                                </a>
+                            </td>
+                        {% endif %}
+                        {% if request.user.is_superuser and not user.is_superuser %}
+                            <td>
+                                <a href="{{ user.get_delete_url }}" class="btn btn-danger" role="button">
+                                    Удалить
+                                </a>
+                            </td>
+                        {% endif %}
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>
+    {% if request.user.is_superuser %}
+        <a href="{% url 'add_user' %}" class="btn btn-success" role="button">Добавить пользователя</a>
+    {%endif%}
+{% endblock %}

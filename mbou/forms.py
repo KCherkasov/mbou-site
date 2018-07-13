@@ -200,8 +200,8 @@ class PhotoAddForm(forms.Form):
     description = forms.CharField(widget=forms.Textarea(
       attrs={'class': 'form-control', 'rows': 3, 'placeholder': u'Краткое описание фотографии (необязательно)', }),
       label=u'Описание фотографии', required=False, empty_value=u'')
-    photo = forms.FileField(widget=forms.ImageField(label=u'Файл'))
-    album = forms.ModelChoiceField(queryset=Album.objects.all())
+    photo = forms.FileField(widget=forms.ClearableFileInput(attrs={'class': 'form-control'}), label=u'Фотография')
+    album = forms.ModelChoiceField(queryset=Album.objects.all(), label=u'Альбом')
 
     def __init__(self, *args, **kwargs):
         album_id = kwargs.pop('album_id', None)
@@ -209,17 +209,24 @@ class PhotoAddForm(forms.Form):
         if album_id:
             self.fields['album'].queryset = Album.objects.filter(pk=album_id)
 
+    def clean(self):
+        if not self.cleaned_data['label']:
+            raise forms.ValidationError(u'Введите название фотографии')
+        if not self.cleaned_data['photo']:
+            raise forms.ValidationError(u'Загрузите фотографию!')
+
     def save(self):
         data = self.cleaned_data
         photo = Photo()
         photo.label = data.get('label')
         photo.description = data.get('description')
+        album = data.get('album')
+        photo.album = album
         photo.save()
         if data.get('photo') is not None:
             photo_file = data.get('photo')
             photo_namext = re.split('[.]+', photo_file.name)
             photo.photo.save('%s_%s.%s' % (photo_namext[0], str(photo.id), photo_namext[1]), photo_file, save=True)
         photo.save()
-        album = data.get('album')
         album.photo_set.add(photo)
         return photo

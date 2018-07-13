@@ -2,6 +2,8 @@
 
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
 from django.forms.models import model_to_dict
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import render
@@ -10,9 +12,9 @@ from django.utils import timezone
 
 from mbou import categories
 from mbou import miscellaneous
-from mbou.forms import AddNewsForm, LessonTimingForm, DocumentForm, SignInForm,\
+from mbou.forms import AddNewsForm, LessonTimingForm, DocumentForm, SignInForm, \
     ProfileEditForm, StaffMemberForm, PhotoAddForm, AlbumAddForm
-from mbou.models import News, LessonTiming, Document, DocumentCategory, StaffMember, Photo, Album
+from mbou.models import News, LessonTiming, Document, DocumentCategory, StaffMember, Album, UrlUser
 
 
 def index(request):
@@ -35,6 +37,7 @@ def news(request, id):
                                              "cats": DocumentCategory.objects.get_top_X, })
 
 
+@login_required
 def news_add(request):
     if request.method == 'POST':
         add = News()
@@ -48,6 +51,7 @@ def news_add(request):
                                              "cats": DocumentCategory.objects.get_top_X, })
 
 
+@login_required
 def lesson_edit(request):
     if request.method == "POST":
         form = LessonTimingForm(request.POST)
@@ -88,6 +92,7 @@ def document_show(request, title):
                                              "cats": DocumentCategory.objects.get_top_X, 'is_pdf': is_pdf, })
 
 
+@login_required
 def document_add(request):
     if request.method == 'POST':
         form = DocumentForm(request.POST, request.FILES)
@@ -286,6 +291,7 @@ def staff_list_not_elementary(request):
                                                          "members": members, })
 
 
+@login_required
 def staff_member_add(request):
     if request.method == 'POST':
         form = StaffMemberForm(request.POST)
@@ -299,6 +305,7 @@ def staff_member_add(request):
                                                           "form": form, })
 
 
+@login_required
 def staff_member_edit(request, full_name):
     if request.method == 'POST':
         form = StaffMemberForm(request.POST)
@@ -311,17 +318,20 @@ def staff_member_edit(request, full_name):
         except StaffMember.DoesNotExist:
             raise Http404()
         model = model_to_dict(staffer)
+        model['category'] = staffer.category.title
+        model['subject'] = staffer.subject.title
         form = StaffMemberForm(model)
     return render(request, 'staff_member_form_edit.html', {"news": News.objects.all, 'year': timezone.now,
                                                            "cats": DocumentCategory.objects.get_top_X,
                                                            "form": form, })
 
 
+@login_required
 def add_photo_certain(request, album_id):
     if not Album.objects.all:
         return HttpResponseRedirect(reverse('add_album'))
     if request.method == 'POST':
-        form = PhotoAddForm(request.POST)
+        form = PhotoAddForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
             if album_id:
@@ -329,6 +339,8 @@ def add_photo_certain(request, album_id):
             else:
                 real_album_id = form.cleaned_data['album'].title_id
             return HttpResponseRedirect(reverse('album', kwargs={'album_id': real_album_id, }))
+        else:
+            return HttpResponseRedirect(reverse('add_photo_certain', kwargs={'album_id': album_id, }))
     else:
         form = PhotoAddForm(album_id=album_id)
         return render(request, 'photo_add.html', {'news': News.objects.all, 'year': timezone.now,
@@ -336,16 +348,18 @@ def add_photo_certain(request, album_id):
                                                   'form': form, })
 
 
+@login_required
 def add_photo_choice(request):
     return add_photo_certain(request, None)
 
 
+@login_required
 def add_album(request):
     if request.method == 'POST':
         form = AlbumAddForm(request.POST)
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect(reverse('add_album'))
+            return HttpResponseRedirect(reverse('albums_list'))
     else:
         form = AlbumAddForm()
         return render(request, 'album_add.html', {'news': News.objects.all, 'year': timezone.now,
@@ -373,18 +387,57 @@ def album(request, album_id):
 
 
 @login_required
-def edit(request):
+def user_management(request):
+    users = UrlUser.objects.all()
+    return render(request, 'users_list.html', {'news': News.objects.all, 'year': timezone.now,
+                                               'cats': DocumentCategory.objects.get_top_X, 'users': users, })
+
+
+@login_required
+def edit_user(request, user):
     if request.method == 'POST':
         form = ProfileEditForm(request.POST)
         if form.is_valid():
-            form.save(request.user)
-            return HttpResponseRedirect(reverse('index'))
+            form.save(user)
+            if request.user.is_superuser:
+                return HttpResponseRedirect(reverse('user_management'))
+            else:
+                return HttpResponseRedirect(reverse('index'))
     else:
-        user = model_to_dict(request.user)
+        user = model_to_dict(user)
         form = ProfileEditForm(user)
     return render(request, 'profile_edit.html', {'news': News.objects.all, 'year': timezone.now,
                                                  'cats': DocumentCategory.objects.get_top_X,
-                                                 'form': form, 'user': request.user, })
+                                                 'form': form, 'user': user, })
+
+
+@login_required
+def edit(request):
+    return edit_user(request, request.user)
+
+
+@login_required
+def edit_user_by_username(request, username):
+    if not request.user.is_superuser:
+        return HttpResponseRedirect(reverse('user_management'))
+    try:
+        user = User.objects.get_by_natural_key(username=username)
+        return edit_user(request, user)
+    except User.DoesNotExist:
+        raise Http404()
+
+
+@login_required
+def delete_user(request, username):
+    if not request.user.is_superuser:
+        return HttpResponseRedirect(reverse('user_management'))
+    try:
+        user = User.objects.get_by_natural_key(username=username)
+        user.is_active = False
+        user.save()
+        return HttpResponseRedirect(reverse('user_management'))
+    except User.DoesNotExist:
+        raise Http404()
 
 
 @login_required
@@ -392,3 +445,18 @@ def logout(request):
     redirect = request.GET.get('continue', '/')
     auth.logout(request)
     return HttpResponseRedirect(redirect)
+
+
+@login_required
+def add_user(request):
+    if not request.user.is_superuser:
+        return HttpResponseRedirect(reverse('user_management'))
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('user_management'))
+    else:
+        form = UserCreationForm()
+        return render(request, 'add_user.html', {'news': News.objects.all, 'year': timezone.now,
+                                                 'cats': DocumentCategory.objects.get_top_X, 'form': form, })

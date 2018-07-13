@@ -6,17 +6,17 @@
 
 {% block content %}
     <div class="page-header">
-        <h1>Альбом {{ album.title }}</h1>
+        <h1 class="text-center">Альбом <i>{{ album.title }}</i></h1>
     </div>
     <hr/>
     {% if album.photo_set.all %}
-    <div id="albumPhotosCarousel" class="carousel slide" data-ride="carousel">
+    <div id="albumPhotosCarousel" class="carousel slide" data-ride="carousel" style="z-index: 0">
         <ol class="carousel-indicators">
             {% for photos in album.photo_set.all %}
                 <li data-target="#albumPhotosCarousel" data-slide-to="{{ forloop.counter }}" {% if forloop.first %}class="active"{% endif %}></li>
             {% endfor %}
         </ol>
-        <div class="carousel-inner">
+        <div class="carousel-inner pull-center">
             {% for photo in album.photo_set.all %}
                 <div class="carousel-item {% if forloop.first %}active{% endif %}">
                     <img class="d-block w-100" src="{{ photo.photo_url }}" alt="{{ photo.description }}"/>
@@ -36,16 +36,21 @@
             <span class="sr-only">Next</span>
         </a>
     </div>
+    {% if request.user.is_authenticated %}
+        <a class="btn btn-primary" role="button" href="{{ album.photo_add_url }}">Добавить фотографии</a>
+    {% endif %}
     {% else %}
-        <p class="lead">Похоже, пока не загружено ни одной фотографии.</p>
-        {% if not request.user.is_authenticated %}
-            <a class="btn btn-primary" role="button" href="{{ album.add_photo_url }}">Добавить фотографии</a>
+        <p class="lead text-center">Похоже, пока не загружено ни одной фотографии.</p>
+        {% if request.user.is_authenticated %}
+            <p class="text-center">Исправьте это!</p>
+            <a class="btn btn-primary" role="button" href="{{ album.photo_add_url }}">Добавить фотографии</a>
         {% else %}
-            <p>Попробуйте заглянуть сюда немного позднее!</p>
+            <p class="text-center">Попробуйте заглянуть сюда немного позднее!</p>
         {% endif %}
     {% endif %}
+    <a href="{% url 'albums_list' %}" class="btn btn-primary" role="button">К списку альбомов</a>
     <span class="divider" role="separator"></span>
-    <p class="text-muted">
+    <p class="text-muted text-center">
         Опубликовано {{ album.pub_date }} Просмотров: {{ album.views_count }} Фотографий: {{ album.photos_count }}
     </p>
 {% endblock %}
