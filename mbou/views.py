@@ -2,7 +2,6 @@
 
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.forms.models import model_to_dict
 from django.http import Http404, HttpResponseRedirect
@@ -13,7 +12,7 @@ from django.utils import timezone
 from mbou import categories
 from mbou import miscellaneous
 from mbou.forms import AddNewsForm, LessonTimingForm, DocumentForm, SignInForm, \
-    ProfileEditForm, StaffMemberForm, PhotoAddForm, AlbumAddForm
+    ProfileEditForm, StaffMemberForm, PhotoAddForm, AlbumAddForm, UrlUserCreationForm
 from mbou.models import News, LessonTiming, Document, DocumentCategory, StaffMember, Album, UrlUser
 
 
@@ -389,8 +388,10 @@ def album(request, album_id):
 @login_required
 def user_management(request):
     users = UrlUser.objects.all()
+    for user in users:
+        print(user)
     return render(request, 'users_list.html', {'news': News.objects.all, 'year': timezone.now,
-                                               'cats': DocumentCategory.objects.get_top_X, 'users': users, })
+                                               'cats': DocumentCategory.objects.get_top_X, 'users_list': users, })
 
 
 @login_required
@@ -421,7 +422,7 @@ def edit_user_by_username(request, username):
     if not request.user.is_superuser:
         return HttpResponseRedirect(reverse('user_management'))
     try:
-        user = User.objects.get_by_natural_key(username=username)
+        user = UrlUser.objects.get_by_natural_key(username=username)
         return edit_user(request, user)
     except User.DoesNotExist:
         raise Http404()
@@ -432,11 +433,11 @@ def delete_user(request, username):
     if not request.user.is_superuser:
         return HttpResponseRedirect(reverse('user_management'))
     try:
-        user = User.objects.get_by_natural_key(username=username)
+        user = UrlUser.objects.get_by_natural_key(username=username)
         user.is_active = False
         user.save()
         return HttpResponseRedirect(reverse('user_management'))
-    except User.DoesNotExist:
+    except UrlUser.DoesNotExist:
         raise Http404()
 
 
@@ -452,11 +453,11 @@ def add_user(request):
     if not request.user.is_superuser:
         return HttpResponseRedirect(reverse('user_management'))
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = UrlUserCreationForm(request.POST)
         if form.is_valid():
             form.save()
             return HttpResponseRedirect(reverse('user_management'))
     else:
-        form = UserCreationForm()
+        form = UrlUserCreationForm()
         return render(request, 'add_user.html', {'news': News.objects.all, 'year': timezone.now,
                                                  'cats': DocumentCategory.objects.get_top_X, 'form': form, })

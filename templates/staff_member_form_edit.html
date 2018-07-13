@@ -19,20 +19,20 @@
         <form class="form-horizontal" method="post" action="">
             {% csrf_token %}
             {% for field in form %}
-                <div class="form-group">
+                <div class="form-group" role="group">
                     <label for="{{ field.name }}" class="col-sm-2 control-label">{{ field.label }}</label>
                     <div class="col-sm-5">
                         {{ field }}
                     </div>
                 </div>
             {% endfor %}
-            <div class="form-group">
-                <div class="col-sm-offset-2 col-sm-2">
-                    <button type="submit" class="btn btn-primary">Применить</button>
-                </div>
-                <div class="col-sm-offset-2 col-sm-2">
-                    <a href="{% url 'staff_all' %}" class="btn btn-danger">Отменить</a>
-                </div>
+            <div class="btn-group" role="group">
+                <button type="submit" class="btn btn-primary">
+                    Применить
+                </button>
+                <a href="{% url 'staff_all' %}" class="btn btn-danger" role="button">
+                    Отменить
+                </a>
             </div>
         </form>
     </div>

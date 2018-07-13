@@ -11,7 +11,7 @@
 {% block content %}
     <div class="page-header">
         <h1 class="text-center">
-            {% if request.user.is_super_user %}
+            {% if request.user.is_superuser %}
                 Управление авторизованными пользователями
             {% else %}
                 Список авторизованных пользователей
@@ -33,13 +33,13 @@
             </tr>
         </thead>
         <tbody>
-            {% for user in user_list %}
-                {% if user.is_active or user.is_superuser %}
+            {% for user in users_list %}
+                {% if user.get_is_active or user.get_is_superuser %}
                     <tr>
                         <td>{{ user.get_full_name }}</td>
-                        <td><a href="mailto:{{ user.email }}">{{ user.email }}</a></td>
-                        <td>{{ user.date_joined }}</td>
-                        <td>{{ user.last_login }}</td>
+                        <td><a href="mailto:{{ user.get_email }}">{{ user.email }}</a></td>
+                        <td>{{ user.get_date_joined }}</td>
+                        <td>{{ user.get_last_login }}</td>
                         {% if user == request.user or request.user.is_superuser %}
                             <td>
                                 <a href="{{ user.get_edit_url }}" class="btn btn-primary" role="button">
@@ -47,7 +47,7 @@
                                 </a>
                             </td>
                         {% endif %}
-                        {% if request.user.is_superuser and not user.is_superuser %}
+                        {% if request.user.is_superuser and not user.get_is_superuser %}
                             <td>
                                 <a href="{{ user.get_delete_url }}" class="btn btn-danger" role="button">
                                     Удалить

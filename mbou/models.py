@@ -3,6 +3,7 @@ import re
 from random import choice
 
 from django.contrib.auth.models import User
+from django.contrib.auth.models import UserManager
 from django.core import validators
 from django.db import models
 from django.db.models import Count
@@ -314,12 +315,37 @@ class Photo(models.Model):
         ordering = ['-pub_date']
 
 
+class UrlUserManager(UserManager):
+    def all(self):
+        return super(UrlUserManager, self).all()
+
+
 class UrlUser(User):
     class Meta:
         proxy = True
+
+    def get_full_name(self):
+        return super(UrlUser, self).get_full_name()
+
+    def get_email(self):
+        return self.email
+
+    def get_date_joined(self):
+        return self.date_joined
+
+    def get_is_active(self):
+        return self.is_active
+
+    def get_is_superuser(self):
+        return self.is_superuser
+
+    def get_last_login(self):
+        return self.last_login
 
     def get_edit_url(self):
         return reverse('profile_edit_super', kwargs={'username': self.username})
 
     def get_delete_url(self):
         return reverse('profile_delete', kwargs={'username': self.username})
+
+    objects = UrlUserManager()

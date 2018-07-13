@@ -175,6 +175,7 @@
                        Добавить новость
                    </a>
                </li>
+               {% if request.user.is_superuser %}
                <li class="nav-item">
                    <a href="{% url 'document_add' %}" class="nav-link">
                        Добавить документ
@@ -185,6 +186,7 @@
                        Добавить педагога
                    </a>
                </li>
+               {% endif %}
                <li class="nav-item">
                    <a href="{% url 'add_album' %}" class="nav-link">
                        Создать фотоальбом

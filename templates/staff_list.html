@@ -19,9 +19,11 @@
                 <th class="text-center">Категория</th>
                 <th class="text-center">Предмет</th>
                 <th class="text-center">Является администрацией(должность)</th>
-                <th class="text-center">Совместитель</th>
+                {% if request.user.is_superuser %}
+                    <th class="text-center">Совместитель</th>
+                {% endif %}
                 <th class="text-center">Эл.почта</th>
-                {% if request.user.is_authenticated %}
+                {% if request.user.is_superuser %}
                     <th></th>
                 {% endif %}
             </tr>
@@ -43,6 +45,7 @@
                                 Нет
                             {% endif %}
                         </td>
+                        {% if request.user.is_superuser %}
                         <td>
                             {% if staff_member.is_combiner %}
                                 Да
@@ -50,6 +53,7 @@
                                 Нет
                             {% endif %}
                         </td>
+                        {% endif %}
                         <td>
                             <a href="mailto:{{ staff_member.email }}">{{ staff_member.email }}</a>
                         </td>

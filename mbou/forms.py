@@ -4,7 +4,7 @@ from django import forms
 from django.contrib.auth import authenticate
 
 from mbou.models import News, LessonTiming, Document, DocumentCategory,\
-    StaffMember, Subject, StafferCategory, Photo, Album
+    StaffMember, Subject, StafferCategory, Photo, Album, UrlUser
 
 
 class AddNewsForm(forms.ModelForm):
@@ -54,7 +54,7 @@ class DocumentForm(forms.Form):
     description = forms.CharField(widget=forms.TextInput(
       attrs={'class': 'form-control', 'placeholder': u'Краткое описание документа (необязательно)', }),
       label=u'Описание документа', required=False)
-    doc = forms.FileField(widget=forms.ClearableFileInput(attrs={'class': 'form-control', }), label=u'Файл')
+    doc = forms.FileField(widget=forms.ClearableFileInput(attrs={'class': 'form-control-file', }), label=u'Файл')
     categories = forms.CharField(widget=forms.TextInput(
       attrs={'class': 'form-control', 'placeholder': u'Категории документа (каждая категория начинается с #)', }),
       label=u'Категории')
@@ -200,8 +200,9 @@ class PhotoAddForm(forms.Form):
     description = forms.CharField(widget=forms.Textarea(
       attrs={'class': 'form-control', 'rows': 3, 'placeholder': u'Краткое описание фотографии (необязательно)', }),
       label=u'Описание фотографии', required=False, empty_value=u'')
-    photo = forms.FileField(widget=forms.ClearableFileInput(attrs={'class': 'form-control'}), label=u'Фотография')
-    album = forms.ModelChoiceField(queryset=Album.objects.all(), label=u'Альбом')
+    photo = forms.FileField(widget=forms.ClearableFileInput(attrs={'class': 'form-control-file'}), label=u'Фотография')
+    album = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'form-control'}),
+                                   queryset=Album.objects.all(), label=u'Альбом')
 
     def __init__(self, *args, **kwargs):
         album_id = kwargs.pop('album_id', None)
@@ -230,3 +231,47 @@ class PhotoAddForm(forms.Form):
         photo.save()
         album.photo_set.add(photo)
         return photo
+
+
+class UrlUserCreationForm(forms.Form):
+    username = forms.CharField(widget=forms.TextInput(
+        attrs={'class': 'form-control', 'placeholder': u'Логин', }),
+        max_length=30, label=u'Логин')
+    first_name = forms.CharField(widget=forms.TextInput(
+        attrs={'class': 'form-control', 'placeholder': u'Имя Отчество', }),
+        max_length=30, label=u'Имя')
+    last_name = forms.CharField(widget=forms.TextInput(
+        attrs={'class': 'form-control', 'placeholder': 'Фамилия', }),
+        max_length=30,
+        label=u'Фамилия')
+    email = forms.CharField(widget=forms.TextInput(
+        attrs={'class': 'form-control', 'placeholder': u'Введите e-mail', }),
+        max_length=30, label=u'Электронная почта')
+    password1 = forms.CharField(widget=forms.PasswordInput(
+        attrs={'class': 'form-control', 'placeholder': u'Введите пароль', }),
+        min_length=6, label=u'Пароль')
+    password2 = forms.CharField(widget=forms.PasswordInput(
+        attrs={'class': 'form-control', 'placeholder': u'Подтвердите пароль', }),
+        min_length=6, label=u'Пароль еще раз')
+
+    def clean_password2(self):
+        password = self.cleaned_data.get('password1', '')
+        confirm = self.cleaned_data.get('password2', '')
+        if password != confirm:
+            forms.ValidationError('Введенные пароли не совпадают')
+
+    def save(self):
+        data = self.cleaned_data
+        user = UrlUser()
+        user.username = data.get('username')
+        user.first_name = data.get('first_name')
+        user.last_name = data.get('last_name')
+        user.email = data.get('email')
+        password = self.cleaned_data.get('password1', '')
+        if password != '':
+            user.set_password(password)
+        user.is_active = True
+        user.is_superuser = False
+        user.is_staff = True
+        user.save()
+        return self
