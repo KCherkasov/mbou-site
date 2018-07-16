@@ -25,6 +25,7 @@
             </div>
           {% endif %}
           </div>
+          <hr/>
       </div>
     </div>
   </div>
@@ -49,12 +50,18 @@
         </div>
         <div class="card-footer">
           <p class="document-vote-count text-muted small text-center">
-            Опубликовано {{ doc.pub_date }} Просмотров: {{ doc.views_count }}
+            {% if request.user.is_authenticated %}Опубликовано {{ doc.pub_date }} {% endif %}Просмотров: {{ doc.views_count }}
           </p>
         </div>
       </div>
+      {% if forloop.counter|divisibleby:2 %}
+        </div>
+        <div class="card-group">
+      {% endif %}
+      {% if not forloop.counter|divisibleby:2 and forloop.last %}
+        </div>
+      {% endif %}
     {% endfor %}
-    </div>
     <div class="paginator-block" align="center">
       {% include 'paginator.html' with objects=docs %}
     </div>

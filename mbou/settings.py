@@ -119,7 +119,6 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 )
 
-MEDIAFILES_DIRS = (os.path.join(BASE_DIR, 'media'), )
 
 MEDIAFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
@@ -127,7 +126,9 @@ MEDIAFILES_FINDERS = (
 )
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = '/var/www/sosh7-lobnya.ru/media'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+MEDIAFILES_DIRS = (MEDIA_ROOT)
 
 # SECURE_HSTS_SECONDS = 3600
 # SECURE_HSTS_PRELOAD = True
