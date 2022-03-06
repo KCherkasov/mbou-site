@@ -1,0 +1,119 @@
+{% extends "news.html" %}
+
+{% block title %} Главная {% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+  <h1 class="text-center"> Добро пожаловать на сайт МБОУ СОШ №7 г.Лобня! </h1>
+</div>
+<div class="media d-flex justify-content-center ">
+<div class="card w-75 border-light" align="center" >
+  <div class="card-body">
+    <h4 class="card-title">Уважаемые родители!</h5>
+    <p class="card-text">В Подмосковье запущен проект «Родительский контроль», в рамках которого каждый родитель может посетить школьную столовую и оценить качество питания. </p>
+    <p class="card-text">В нашей школе приступила к работе общественная комиссия по контролю за организацией и качеством питания. Комиссией разработан график посещения школьной столовой родителями. Свою кандидатуру на участие в общественном контроле вы можете согласовать с классным руководителем. В рамках данного проекта введён специальный <strong color="#FF2D00"> чат-бот в Телеграмм «Школьное питание Подмосковья» @pitanie_v_shkolakh_mo_bot</strong>, где каждый может выразить своё мнение по качеству питания. </p>
+    <h5 class="card-title">График посещения школьной столовой родителями обучающихся на 3-ю четверть:</h5>
+  </div>
+  <div class="card-body table-responsive-lg">
+       <table class="table table-striped table-hover">
+            <thead class="bg-primary text-white">
+            <tr>
+                <th>Дата посещения</th>
+                <th>Класс</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>25.02.2020</td>
+                <td>2а, 2б</td>
+            </tr>
+            <tr>
+                <td>26.02.2020</td>
+                <td>2в, 3а</td>
+            </tr>
+            <tr>
+                <td>27.02.2020</td>
+                <td>3б, 3в</td>
+            </tr>
+            <tr>
+                <td>03.03.2020</td>
+                <td>1а, 1б, 1в</td>
+            </tr>
+            <tr>
+                <td>04.03.2020</td>
+                <td>4а, 4б</td>
+            </tr>
+            <tr>
+                <td>05.03.2020</td>
+                <td>4в, 5а</td>
+            </tr>
+            <tr>
+                <td>10.03.2020</td>
+                <td>5б, 5в</td>
+            </tr>
+            <tr>
+                <td>11.03.2020</td>
+                <td>6а, 6б</td>
+            </tr>
+            <tr>
+                <td>12.03.2020</td>
+                <td>7а, 7б</td>
+            </tr>
+            <tr>
+                <td>17.03.2020</td>
+                <td>7в, 8а</td>
+            </tr>
+            <tr>
+                <td>18.03.2020</td>
+                <td>8б, 8в</td>
+            </tr>
+            <tr>
+                <td>19.03.2020</td>
+                <td>9а, 9б</td>
+            </tr>
+            <tr>
+                <td>20.03.2020</td>
+                <td>10, 11</td>
+            </tr>
+        </tbody>
+    </table>
+  </div>
+  <div class="card-body">
+      <h5 class="card-title">В случае, если у Вас нет возможности прийти в предлагаемое время, Вы можете воспользоваться Горячей линией, чтобы записаться на посещение школьной столовой с понедельника по пятницу с 10:00 до 12:00.</h5>
+      <h4 class="card-title">Горячая линия "Родительский контроль школьного питания в МБОУ СОШ №7: <br/>8(968)418-16-08</h5>
+  </div>
+</div>
+</div>
+
+<span class="divider" role="separator"></span>
+
+<div class="media d-flex justify-content-center">
+<div class="card-deck w-50">
+  {% for entry in top_news %}
+  <div class="card w-50">
+    {% if entry.pic %}
+    <img class="card-img-top" src="{{ entry.pic_url }}" alt="Card image cap">
+    {%endif%}
+    <div class="card-body">
+      <h5 class="card-title">{{ entry.title }}</h5>
+      <p class="card-text">{{ entry.content }}</p>
+      <p class="card-text text-muted">{% if user.is_authenticated %}Опубликовано {{ n.pub_date }} {% endif %}Просмотров: {{ n.views_count }}</p>
+      <a href="{{ entry.doc_url }}" class="card-link btn btn-primary">Подробнее</a>
+     </div>
+  </div>
+      {% if forloop.counter|divisibleby:2 %}
+  </div>
+  </div>
+  <div class="media d-flex justify-content-center">
+  <div class="card-deck w-50">
+  {% endif %}
+      {% if not forloop.counter|divisibleby:2 and forloop.last %}
+        </div>
+        </div>
+      {% endif %}
+  {% endfor %}
+
+<span class="divider" role="separator"></span>
+
+{% endblock %}

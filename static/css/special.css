@@ -1,0 +1,92 @@
+#spsettings {background:#f1f2f7 !important;position:relative;}
+#spsettings .content {width:100%;margin:0 auto;position:relative;padding:0px;}
+#spsettings * {color: #000 !important;}
+#spsettings .setbox.images label > div{display: inline;}
+#spsettings .setbox.images label > div > .switch{float: right;top:1px;}
+#spsettings #generalsite{
+  float: right;
+  position: relative;
+  top: 8px;
+  padding:20px;
+  right:auto;
+  line-height: 0px!important;
+}
+#spsettings *{
+    font-size: 16px !important;
+    font-family: Helvetica,Arial,sans-serif !important;
+}
+.setbox {padding:20px; display: inline-block;}
+.setbox>div {display:inline-block;margin-right:10px;}
+.setbox>div:last-child {margin-right:0px;}
+.setbox.images>div:first-child {margin-right:0;}
+.setbox .active {border-bottom: 4px solid #000 !important;padding-bottom:4px;}
+.setbox #imgstyle.active, .setbox .generalsite.active {border-bottom:0 !important; padding-bottom:0;}
+.setbtn {cursor: pointer;}
+.setbox .switch {position:relative;top:5px;}
+.setname, .generalsite {font-size:14px !important;}
+#generalsite {position: absolute; right:0;}
+.sqr {width: 30px; height:30px; line-height:30px !important; text-align: center;}
+.setbox #sfont .sfontsize {font-size: 16px !important;}
+.setbox #mfont .mfontsize {font-size: 20px !important;}
+.setbox #lfont .lfontsize {font-size: 24px !important;}
+.sfontsize #sfont .sfontsize{font-size: 16px !important;}
+.mfontsize #mfont .mfontsize{font-size: 20px !important;}
+.lfontsize #lfont .lfontsize{font-size: 24px !important;}
+.wsite,#wsqr {background: #fff !important;color:#000 !important;}
+.bsite,#bsqr {background: #000 !important;color:#fff !important;}
+.csite,#csqr{background: #9dd1ff !important;color:#000 !important;}
+.spv.imagesHidden img, .spv.imagesHidden embed {visibility: hidden !important;}
+.spv.braileFont *{font-family:"brailleregular" !important;}
+.spv.wsite,#wsqr {background: #fff !important;color:#000 !important;}
+.spv.bsite,#bsqr {background: #000 !important;color:#fff !important;}
+.spv.csite,#csqr{background: #9dd1ff !important;color:#000 !important;}
+
+.spv * {background-image:none !important; border:0 !important;}
+.spv #eyes, {display:none !important;}
+.spv #all a {text-decoration:underline;padding-left:0;}
+.spv #all a:hover {text-decoration:none;}
+.spv #all *{background:transparent !important;}
+.spv #header, .spv #menu,.spv #content,.spv .footer,.spv #copyrights {border-top:2px solid !important;}
+.spv #categorylist {list-style-type:decimal;}
+.spv #categorylist li::before {content:'';}
+.spv img {
+  -moz-filter: grayscale(100%);
+    -ms-filter: grayscale(100%);
+    -o-filter: grayscale(100%);
+    -webkit-filter: grayscale(1);
+  -webkit-filter: grayscale(100%);
+    filter: gray;
+  filter: url("data:image/svg+xml;utf8,<svg version='1.1' xmlns='http://www.w3.org/2000/svg' height='0'><filter id='greyscale'><feColorMatrix type='matrix' values='0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0 0 0 1 0' /></filter></svg>#greyscale");
+    filter: grayscale(100%);
+}
+.spv h1 {font-size: 2.6em !important;}
+.spv h2 {font-size: 2.1em !important;}
+.spv h3 {font-size: 1.7em !important;}
+.spv h4 {font-size: 1.3em !important;}
+.spv h5 {font-size: 1em !important;}
+.spv h6 {font-size: 0.85em !important;}
+.spv.wsite * {color:#000 !important;}
+.spv.wsite #content {background:#fff !important;}
+.spv.wsite #menu {background:#fff !important;}
+.spv.wsite #footer {background:#fff !important;}
+.spv.bsite * {color:#fff !important;}
+.spv.bsite #content {background:#000 !important;}
+.spv.bsite #menu {background:#000 !important;}
+.spv.bsite #footer {background:#000 !important;}
+.spv.csite * {color:#000 !important;}
+.spv.csite #content {background:#9dd1ff !important;}
+.spv.csite #menu {background:#9dd1ff !important;}
+.spv.csite #footer {background:#9dd1ff !important;}
+.spv.sfontsize * {font-size: 16px !important;}
+.spv.sfontsize .sqr {line-height:30px !important;}
+.spv.mfontsize * {font-size: 20px !important;}
+.spv.mfontsize .sqr {line-height:30px !important;}
+.spv.lfontsize * {font-size: 24px !important;}
+.spv.lfontsize .sqr {line-height:30px !important;}
+.spv * {line-height:1.4 !important;}
+
+#eyes {width: 100%;margin: 0 auto;position: relative;}
+.sticker {height:24px;width:60px;text-align:center; z-index: 1;background-color: #9dd1ff;}
+.sticker a {display:block;height:100%;}
+.sticker span {padding-top: 5px;color:#fff !important;font-size:14px;}
+#eyes .sticker {position:absolute;right:3px;top:160px;font-size:14px;}

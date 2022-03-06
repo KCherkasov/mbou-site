@@ -1,0 +1,26 @@
+{% extends "news.html" %}
+
+{% block title %}
+Проект 500+ | Главная
+{% endblock %}
+
+{% block content %}
+<div class="card d-flex w-75 text-center text-primary justify-content-center">
+  <img class="card-img-top w-100" src="{{ MEDIA_URL }}/pics/500_plus.jpg" alt="Card image cap">
+
+  <div class="card-body">
+    <h4 class="card-title">Федеральный проект 500+</h4>
+    <p class="card-text">
+        <strong>Цель:</strong> выявление образовательныйх организаций с наибольшими запросами на компенсацию ресурсных и компетентностных дефицитов.
+    </p>
+    <p class="card-text">
+        <strong>Решение:</strong> на основании мониторинговых данных о результативности и условиях обучения, через методическую и ресурсную поддержку
+        образовательным организациям, оказать адресную помощь образовательным организациям с наибольшими запросами на компенсацию ресурсных и компетентностных дефицитов.
+    </p>
+    <p class="card-text">
+        В 2021 и 2022 годах в проекте будут принимать участие по 3000 школ из 84 субъектов РФ.
+    </p>
+    <a href="{% url 'p500_docs' %}" class="card-link btn btn-primary btn-menu btn-block text-break text-uppercase font-weight-bold"><h4>Документы по проекту</h4></a>
+  </div>
+</div>
+{% endblock %}

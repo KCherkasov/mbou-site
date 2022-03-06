@@ -1,0 +1,78 @@
+{% extends "news.html" %}
+
+{% block title %}
+Воспитательная работа
+{% endblock %}
+
+{% block content %}
+    <div class="page-header d-flex justify-content-center">
+        <h2>
+            Воспитательная работа
+        </h2>
+    </div>
+
+    <div class="d-flex justify-content-center">
+        <ul style="list-style: none">
+            <li><h4><a href="http://www.sosh7-lobnya.ru/documents/План_воспитательной_работы_на_2021-2022_учебный_год/">План воспитательной работы на 2021-2022 учебный год</a></h4></li>
+            <li>
+                <h4>Направления работы</h4>
+                <ul>
+                    <li>
+                        <h5><a href="{% url 'sections_full' %}">Объединения по направлениям</a></h5>
+                        <ul>
+                            <li><a href="{% url 'addsched' %}">Расписание работы объединений</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <h5>Школьные детские общественные организации</h5>
+                        <ul>
+                            <li><a href="{% url 'studgov' %}">Ученическое самоуправление</a></li>
+                            <li><a href="{% url 'younguard' %}">Юнармейский отряд "Молодая гвардия"</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <h5>Психолого-педагогическое сопровождение</h5>
+                        <ul>
+                            <li><a href="{% url 'socped' %}">Социальный педагог</a></li>
+                            <li><a href="{% url 'pedpsych' %}">Педагог-психолог</a></li>
+                            <li><a href="{% url 'mediation' %}">Служба школьной медиации</a></li>
+                            <li><a href="{% url 'socservice' %}">Социальная служба</a></li>
+                            <li><a href="{% url 'psychped' %}">Документы по разделу</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <h5>Взаимодействие с родителями</h5>
+                        <ul>
+                            <li><a href="http://www.sosh7-lobnya.ru/documents/План_совместной_работы_с_родителями_обучающихся_на_2020-2021_учебный_год/">План совместной работы с родителями</a></li>
+                            <li><a href="{% url 'parents' %}">Фотоотчеты</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="{% url 'project_victory' %}">
+                            Школьный проект 2019-2020 учебного года «Помним! Славим! Гордимся!»
+                        </a>
+                    </li>
+                    <li>
+                        <h5><a href="{% url 'projects' %}">Проектная деятельность</a></h5>
+                        <ul>
+                            <li><a href="{% url 'project_victory' %}">Школьный проект "2019-2020 учебного года «В единстве народов - сила России»</a></li>
+                            <li><a href="{% url 'heads' %}">Школьный проект «Вожатское движение»</a></li>
+                            <li><a href="{% url 'vector' %}">Школьный спортивный клуб «Вектор»</a></li>
+                            <li><a href="{% url 'yid' %}">Юные инспекторы дорожного движения «Дневной дозор»</a></li>
+                            <li><a href="{% url 'rds' %}">Российское движение школьников</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <h5><a href="{% url 'prof_orient' %}">Профориентационная работа</a></h5>
+                        <ul>
+                            <li><a href="#">План профориентационной работы</a></li>
+                            <li><a href="#">Реализация программы "Путевка в жизнь"</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="{% url 'fairs' %}">Экскурсионная работа</a></li>
+                </ul>
+            </li>
+            <li><a href="{% url 'educational_work' %}">Все документы по разделу</a></li>
+        </ul>
+    </div>
+{% endblock %}

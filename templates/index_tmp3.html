@@ -1,0 +1,70 @@
+{% extends "news.html" %}
+
+{% block title %} Главная {% endblock %}
+
+{% block content %}
+
+<div class="page-header text-primary">
+  <h1 class="text-center"> Добро пожаловать на сайт МБОУ СОШ №7 г.Лобня! </h1>
+</div>
+<div class="media d-flex justify-content-center text-primary">
+<div class="card w-75 border-light" align="center" >
+  <div class="card-body">
+    <h2 class="card-title">Уважаемые родители и обучающиеся!</h2>
+    <h4 class="card-text">В соответствии с <a class="card-link text-info" target="__blank" href="http://kremlin.ru/acts/news/63134">Указом Президента Российской Федерации N239 от 02.04.2020 г.</a> и <a target="__blank" href="https://mosreg.ru/download/document/1061375" class="card-link text-info">Постановлением Губернатора Московской области №171-ПГ от 02.04.2020 г.</a> уведомляем вас, что с 06.04.2020 по 30.04.2020 будет организована работа образовательных организаций в условиях домашней самоизоляции детей и педагогических работников с применением электронного обучения и дистанционных образовательных технологий. Источником получения домашних заданий является Школьный портал. Ежедневно учащиеся школы должны в соответствии с расписанием выполнять задания, выданные учителем-предметником. Желаем успехов! </h4>
+    <h2 class="card-title">Уважаемые родители!</h2>
+    <h4 class="card-text">Все учителя нашей школы очень серьезно подготовились к работе в режиме дистанционного обучения! Начнётся максимальная нагрузка на все технические средства. У всех разные технические возможности. Пожалуйста, не волнуйтесь! Если вдруг не смогли зайти на платформу, не смогли подключиться вовремя, отключился интернет, сообщите , пожалуйста, своему классному руководителю о проблеме , и мы с вами обязательно найдём выход! Если возникли любые сложности, связанные с обучением ребёнка, с его состоянием здоровья, обязательно сообщите классному руководителю! Поверьте, нам не все равно, как обстоят дела у наших детей!</h4>
+    <h3 class="card-text">Вся информация о дистанционном обучении размещена в Школьном портале. </h3>
+    <h3 class="card-text">Помните, ваш классный руководитель и администрация школы всегда готовы вам помочь!</h3>
+  </div>
+  <div class="card-img">
+      <img src="{{ MEDIA_URL }}/pics/diedu.jpg"/>
+  </div>
+  <div class="card-body text-info">
+      <h4 class="card-title">Горячая линия по вопросам дистанционного обучения в МБОУ СОШ №7: <br/>8(968)418-16-08 - Дорина Татьяна Геннадьевна, заместитель директора по информатизации образовательного процесса</h4>
+      <h3 class="card-text text-primary">С уважением, администрация МБОУ СОШ №7.</h3>
+  </div>
+  <div class="card-body text-danger">
+    <h3 class="card-text">Просим вас и ваших детей  максимально оставаться дома и соблюдать личную технику безопасности‼️ Берегите себя и ваших близких!</h3>
+  </div>
+  <div class="card-img w-75">
+      <img src="{{ MEDIA_URL }}/pics/mbou7-covid19-leaflet.jpg"/>
+  </div>
+  <div class="card-body">
+      <br/>
+      <br/>
+  </div>
+</div>
+</div>
+
+<span class="divider" role="separator"></span>
+
+<div class="media d-flex justify-content-center text-primary">
+<div class="card-deck w-50">
+  {% for entry in top_news %}
+  <div class="card w-50">
+    {% if entry.pic %}
+    <img class="card-img-top" src="{{ entry.pic_url }}" alt="Card image cap">
+    {%endif%}
+    <div class="card-body">
+      <h5 class="card-title">{{ entry.title }}</h5>
+      <p class="card-text">{{ entry.content }}</p>
+      <p class="card-text text-muted">{% if user.is_authenticated %}Опубликовано {{ entry.pub_date }} {% endif %}Просмотров: {{ entry.views_count }}</p>
+      <a href="{{ entry.doc_url }}" class="card-link btn btn-primary">Подробнее</a>
+     </div>
+  </div>
+      {% if forloop.counter|divisibleby:2 %}
+  </div>
+  </div>
+  <div class="media d-flex justify-content-center text-primary">
+  <div class="card-deck w-50">
+  {% endif %}
+      {% if not forloop.counter|divisibleby:2 and forloop.last %}
+        </div>
+        </div>
+      {% endif %}
+  {% endfor %}
+
+<span class="divider" role="separator"></span>
+
+{% endblock %}

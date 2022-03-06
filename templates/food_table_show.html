@@ -1,0 +1,30 @@
+{% extends 'news.html' %}
+
+{% block title %}Меню на {{ ft.day }}.{{ ft.month }}.{{ ft.year }} ({% if ft.minor %} 1-4 {% else %} 5-11 {% endif %} классы){% endblock %}
+
+{% block content %}
+
+  <div class="page-header">
+    <span class="divider" role="separator"></span>
+    <h3 class="text-center"> Меню на {{ ft.day }}.{{ ft.month }}.{{ ft.year }} ({% if ft.minor %} 1-4 {% else %} 5-11 {% endif %} классы) </h3>
+  </div>
+  {% if ft.doc_url %}
+    <div class="media d-flex justify-content-center" align="center">
+      {% if is_pdf %}
+        <embed class="mbou-media" src="{{ ft.doc_url }}"></embed>
+      {% else %}
+        <iframe class="mbou-media" src="https://view.officeapps.live.com/op/embed.aspx?src={{ ft.doc_full_url }}"></iframe>
+      {% endif %}
+    </div>
+  {% endif %}
+  {% if ft.doc_url %}
+      {% if is_pdf %}
+
+      {% else %}
+        <span class="divider" role="separator"></span>
+        <div class="input-group-lg" align="center"><a class="card-link btn btn-success text-center" href="{{ ft.doc_full_url }}"><h5>Скачать</h5></a></div>
+      {% endif %}
+  {% endif %}
+  <span class="divider" role="separator"></span>
+  <p class="text-muted" align="center">{% if request.user.is_authenticated %}Опубликовано {{ ft.pub_date }} {% endif %}Просмотров: {{ ft.views_count }}</p>
+{% endblock %}

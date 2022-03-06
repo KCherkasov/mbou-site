@@ -1,0 +1,46 @@
+{% extends 'news.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+  {% block preceeding %}
+
+  {% endblock %}
+  <hr/>
+  <div class="page-header">
+    <h1 class="text-center">{{ title }}</h1>
+  </div>
+  {% if fts %}
+    <div class="card-group">
+    {% for ft in fts %}
+      <div class="card document-{% if forloop.counter|divisibleby:2 %}white{% else %}grey{% endif %}">
+        <div class="document-header">
+          <h4 class="card-title text-center text-primary"> {{ ft.day }}.{{ ft.month }}.{{ ft.year }} ({% if ft.minor %} 1-4 {% else %} 5-11 {% endif %} классы)</h4>
+        </div>
+        <div class="card-body">
+          <div class="input-group-lg" align="center">
+              <a class="card-link btn btn-success text-center" href="{{ ft.doc_full_url }}"><h5>Скачать</h5></a>
+              <a class="card-link btn btn-primary text-center" href="{{ ft.url }}"><h5>Просмотр</h5></a>
+          </div>
+        </div>
+        <div class="card-footer">
+          <p class="document-vote-count text-muted small text-center">
+            {% if request.user.is_authenticated %}Опубликовано {{ ft.pub_date }} {% endif %}Просмотров: {{ ft.views_count }}
+          </p>
+        </div>
+      </div>
+      {% if forloop.counter|divisibleby:5 %}
+        </div>
+        <div class="card-group">
+      {% endif %}
+      {% if not forloop.counter|divisibleby:5 and forloop.last %}
+        </div>
+      {% endif %}
+    {% endfor %}
+    <div class="paginator-block" align="center">
+      {% include 'paginator.html' with objects=fts %}
+    </div>
+  {% else %}
+    <h3 class="text-center">Пока не добавлено ни одного документа</h3>
+  {% endif %}
+{% endblock %}

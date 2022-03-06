@@ -1,0 +1,48 @@
+{% extends 'news.html' %}
+
+{% block title %}Поиск документов{% endblock %}
+
+{% block page_title %}Поиск документов{% endblock %}
+
+{% block content %}
+  <div class="page-header text-center">
+    <h1>Поиск документов</h1>
+  </div>
+  <hr/>
+  {% for err in form.non_field_errors %}
+    <div class="login-form-error">
+      <div class="alert alert-danger" role="alert">
+        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+        {{ err }}
+      </div>
+    </div>
+  {% endfor %}
+  <div class="sign-in-form">
+      <form class="form-horizontal" method="post" action="">
+      {% csrf_token %}
+      {% for field in form %}
+      <div class="form-group {% if field.errors %}has-error{% endif %}">
+        <label for="{{ field.name }}" class="col-sm-2 control-label">{{ field.label }}</label>
+        <div class="col-sm-6">
+          {{ field }}
+          {% if field.errors %}
+            {% for err in field.errors %}
+              <div class="login-form-error">
+                <div class="alert alert-danger" role="alert">
+                  <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                  {{ err }}
+                </div>
+              </div>
+            {% endfor %}
+          {% endif %}
+        </div>
+      </div>
+      {% endfor %}
+      <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-2">
+          <button type="submit" class="btn btn-primary">Искать</button>
+        </div>
+      </div>
+    </form>
+  </div>
+{% endblock %}

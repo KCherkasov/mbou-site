@@ -1,0 +1,22 @@
+{% extends "news.html" %}
+
+{% block title %}
+Сведения об образовательной организации: документы
+{% endblock %}
+
+{% block content %}
+<h1 class="text-primary text-center">Документы</h1>
+<div class="text-primary d-flex justify-content-center">
+    <ol>
+        <li><a href="{% url 'main_docs' %}">Учредительные документы</a></li>
+        <li><a href="{% url 'about_financial' %}">Финансово-хозяйственная деятельность</a></li>
+        <li><a href="{% url 'vacancies_docs' %}">Прием и перевод обучающихся</a></li>
+        <li><a href="{% url 'les_curriculum' %}">Режим занятий</a></li>
+        <li><a href="{% url 'lessched' %}">Календарный учебный график, расписание звонков</a></li>
+        <li><a href="{% url 'perf_control' %}">Текущий контроль успеваемости обучающихся</a></li>
+        <li><a href="{% url 'self_diagnosis' %}">Самообследование</a></li>
+        <li><a href="{% url 'about_additional' %}">Платные образовательные услуги</a></li>
+        <li><a href="{% url 'control_results' %}">Предписания органов, осуществляющих государственный контроль (надзор) в сфере образования, отчеты об исполнении таких предписаний</a></li>
+    </ol>
+</div>
+{% endblock %}

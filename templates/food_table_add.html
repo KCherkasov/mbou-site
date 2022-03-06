@@ -1,0 +1,37 @@
+{% extends "news.html" %}
+
+{% block title %}
+Загрузить меню питания
+{% endblock %}
+
+{% block content %}
+
+  <div class="page-header" align="center">
+    <h1>Загрузить меню питания</h1>
+  </div>
+
+  {% for err in form.non_field_errors %}
+    <div class="alert alert-danger" role="alert">
+      <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+      {{ err }}
+    </div>
+  {% endfor %}
+  <div>
+    <form enctype="multipart/form-data" class="form-horizontal" method="post" action="">
+      {% csrf_token %}
+      {% for field in form %}
+        <div class="form-group">
+          <label for="{{ field.name }}" class="col-sm-2 control-label">{{ field.label }}</label>
+          <div class="col-sm-5">
+            {{ field }}
+          </div>
+        </div>
+      {% endfor %}
+      <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-2">
+          <button type="submit" class="btn btn-primary">Опубликовать</button>
+        </div>
+      </div>
+    </form>
+  </div>
+{% endblock %}
