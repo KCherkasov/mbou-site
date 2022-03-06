@@ -5,10 +5,15 @@
 {% endblock %}
 
 {% block content %}
-  <div class="page-header">
-    <h1>{{ n.title }}</h1>
+<div class="card w-75 text-center">
+  {% if n.pic %}
+  <img class="card-img-top" src="{{n.pic_url}}" alt="Card image cap">
+  {% endif %}
+  <div class="card-body">
+    <h5 class="card-title">{{n.title}}</h5>
+    <p class="card-text">{{n.content}}</p>
+    <p class="card-text text-muted">{% if user.is_authenticated %}Опубликовано {{ n.pub_date }} {% endif %}Просмотров: {{ n.views_count }}</p>
+    <a href="{{ n.doc_url }}" class="btn btn-primary">Подробнее</a>
   </div>
-  <p class="lead">{{ n.content }}</p>
-  <span class="divider" role="separator"></span>
-  <p class="text-muted">Опубликовано {{ n.pub_date }} Просмотров: {{ n.views_count }}</p>
+</div>
 {% endblock %}

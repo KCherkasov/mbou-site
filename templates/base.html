@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" class="bg">
   <head>
     {% block meta %}
 
@@ -18,12 +18,14 @@
     {% load static %}
 
     {% block styles %}
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <link href="{% static 'css/ie10-viewport-bug-workaround.css' %}" rel="stylesheet">
     <link href="{% static 'css/sticky-footer-navbar.css' %}" rel="stylesheet">
     <link href="{% static 'css/dashboard.css' %}" rel="stylesheet">
     <link href="{% static 'css/adjustments.css' %}" rel="stylesheet">
-
+    <link href="{% static 'css/special.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.plyr.io/3.6.2/plyr.css" />
     {% endblock %}
 
     <script src="{% static 'js/ie-emulation-modes-warning.js' %}"></script>
@@ -38,8 +40,48 @@
     <![endif]-->
   </head>
 
-  <body>
-    <nav class="navbar navbar-expand-lg navbar-light alert-primary navbar-fixed-top" role="navigation">
+  <body id="all" {% if request.COOKIES.spv %} class="spv" {% endif %}>
+    <div id="eyes">
+        <div class="sticker d-flex justify-content-center">
+            <a href="#" title="Версия для слабовидящих" id="eyes-button" data-spv-on=""><span class="fa fa-eye" aria-hidden="true"></span></a>
+        </div>
+    </div>
+    <div id="spsettings" style="{% if not request.COOKIES.spv %}display: none;{% endif %};">
+        <div class="content">
+                <div class="setbox fontsizes">
+                <div class="setname">Размер шрифта:</div>
+                <div id="sfont" class="setbtn sfont " data-spv-setfontsize="sfontsize"><span class="sfontsize">А</span></div>
+                <div id="mfont" class="setbtn mfont active" data-spv-setfontsize="mfontsize"><span class="mfontsize">Б</span></div>
+                <div id="lfont" class="setbtn lfont " data-spv-setfontsize="lfontsize"><span class="lfontsize">В</span></div>
+            </div>
+            <div class="setbox colorstyle">
+                <div>Цвет сайта:</div>
+                <div class="setbtn wstyle active" data-spv-setstyle="wsite">
+                    <div id="wsqr" class="sqr">Ж</div>
+                </div>
+                <div class="setbtn bstyle " data-spv-setstyle="bsite">
+                    <div id="bsqr" class="sqr">Ж</div>
+                </div>
+                <div class="setbtn cstyle " data-spv-setstyle="csite">
+                    <div id="csqr" class="sqr">Ж</div>
+                </div>
+            </div>
+            <div class="setbox images">
+                <label>
+                    <div class="setname">Изображения:</div>
+                    <div>
+                        <div class="switch">
+                            <input type="checkbox" checked="" data-spv-setimgstyle="">
+                        </div>
+                    </div>
+                </label>
+            </div>
+            <div id="generalsite" class="setbox generalsite">
+                <div class="setbtn generalsite"><a href="#" data-spv-off="">Обычная версия</a></div>
+            </div>
+        </div>
+    </div>
+    <nav id="menu" class="navbar navbar-expand-lg navbar-light alert-primary navbar-fixed-top" role="navigation">
       {% block navigation %}
         <a class="navbar-brand text-primary mb-0 h1" href="{% url 'index' %}">
             <img src="{{ MEDIA_URL }}/pics/mbou-7_300_25p.gif" width="110px" height="110px" class="d-inline-block align-top">
@@ -50,23 +92,27 @@
         </button>
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="navbar-nav navbar-mr-auto">
-            <li class="nav-item dropdown"><a href="#"{%block news_styles%}{% endblock %}>Новости <span class="caret"></span></a> {% block news %}{% endblock %}</li>
             <li class="nav-item dropdown">
               <a href="#" class="dropdown-toggle" id="aboutSchool" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">О школе <span class="caret"></span></a>
               <div class="dropdown-menu" aria-labelledby="aboutSchool">
-                <a href="{% url 'curriculum' %}" class="dropdown-item">Годовой календарный учебный план</a>
-                <div class="dropdown-divider"></div>
                 <a href="#" class="dropdown-item">История школы</a>
                 <div class="dropdown-divider"></div>
                 <a href="#" class="dropdown-item">Символика школы</a>
                 <div class="dropdown-divider"></div>
-                <a href="{% url 'school_standard' %}" class="nav-link">
-                    Cтандарт оформления образовательной организации
-                </a>
-                <div class="dropdown-divider"></div>
                 <a href="{% url 'regional_contests' %}" class="dropdown-item">Участие в региональных конкурсах</a>
                 <div class="dropdown-divider"></div>
                 <a href="{% url 'albums_list' %}" class="dropdown-item">Фотогалереи</a>
+                <div class="dropdown-divider"></div>
+                <a href="{% url 'studgov' %}" class="dropdown-item">Ученическое самоуправление</a>
+                <div class="dropdown-divider"></div>
+                <a href="{% url 'vpk' %}" class="dropdown-item">Детское общественное объединение Военно-патриотический клуб "Надежда России"</a>
+                <div class="dropdown-divider"></div>
+                <a href="{% url 'el_journ' %}" class="dropdown-item">Электронная газета "Школьная волна"</a>
+                <a href="{% url 'school_press' %}" class="dropdown-item">Школьный пресс-центр</a>
+                <a href="{% url 'museum' %}" class="dropdown-item">Школьный музей "Этнографическая экспозиция русского быта и народных промыслов"</a>
+                <div class="dropdown-divider"></div>
+                <h6 class="dropdown-header">Новости</h6>
+                {% block news %}{% endblock %}
               </div>
             </li>
             <li class="dropdown">
@@ -81,6 +127,7 @@
                 <a href="{% url 'about_structure' %}" class="dropdown-item">
                   Структура и органы управления образовательной организацией
                 </a>
+                <a href="{% url 'about_doc_refs' %}" class="dropdown-item">Основные документы</a>
                 <a href="{% url 'about_docs' %}" class="dropdown-item">Документы</a>
                 <a href="{% url 'about_education' %}" class="dropdown-item">Образование</a>
                 <a href="{% url 'about_standards' %}" class="dropdown-item">Образовательные стандарты</a>
@@ -97,8 +144,41 @@
               </div>
             </li>
             <li class="dropdown">
+                <a href="#" class="dropdown-toggle" id="activityDropdown" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Деятельность</a>
+                <div class="dropdown-menu" aria-labelledby="activityDropdown">
+                    <a href="{% url 'about_education' %}" class="dropdown-item">Образовательная</a>
+                    <a href="{% url 'additional_education' %}" class="dropdown-item">Объединения дополнительного образования</a>
+                    <a href="{% url 'about_standards' %}" class="dropdown-item">ФГОС</a>
+                    <a href="{% url 'educational_programs' %}" class="dropdown-item">Образовательные программы</a>
+                    <a href="{% url 'self_diagnosis' %}" class="dropdown-item">Самообследование</a>
+                    <a href="{% url 'edu_work' %}" class="dropdown-item">Воспитательная работа</a>
+                    <a href="{% url 'olymp' %}" class="dropdown-item">Всероссийская олимпиада школьников</a>
+                    <a href="{% url 'org_collab' %}" class="dropdown-item">Сотрудничество с предприятиями и организациями</a>
+                    <a href="{% url 'prof_orient' %}" class="dropdown-item">Профориентация</a>
+                    <a href="{% url 'heo_collab' %}" class="dropdown-item">Сотрудничество с ВУЗами</a>
+                    <a href="{% url 'projects' %}" class="dropdown-item">Проектная деятельность</a>
+                    <a href="{% url 'sport' %}" class="dropdown-item">Спорт</a>
+                </div>
+            </li>
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" id="attestDropdown" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Аттестация</a>
+                <div class="dropdown-menu" aria-labelledby="attestDropdown">
+                    <a href="http://ege.edu.ru/" class="dropdown-item">ЕГЭ</a>
+                    <a href="http://gia.edu.ru/" class="dropdown-item">ОГЭ</a>
+                    <a href="#" class="dropdown-item">Всероссийские проверочные работы</a>
+                </div>
+            </li>
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" id="staffDropdown" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Коллектив <span class="caret"></span></a>
+                <div class="dropdown-menu">
+                    <a href="{% url 'about_staff' %}" class="dropdown-item">персонал</a>
+                    <a href="{% url 'methodical_work' %}" class="dropdown-item">методическая работа</a>
+                </div>
+            </li>
+            <li class="dropdown">
               <a href="#" class="dropdown-toggle" id="docsDropdown" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Документы <span class="caret"></span></a>
               <div class="dropdown-menu" aria-labelledby="docsDropdown">
+                <div class="dropdown-divider"></div>
                 <h6 class="dropdown-header">Категории</h6>
                 <div class="dropdown-divider"></div>
                 {% if cats %}
@@ -108,37 +188,43 @@
                   <div class="dropdown-divider"></div>
                 {% endif %}
                   <h6 class="dropdown-header"><a href="{% url 'docs_newest' %}">Все документы</a></h6>
+                  <h6 class="dropdown-header"><a href="{% url 'docs_search' %}">Поиск</a></h6>
               </div>
             </li>
             <li class="dropdown">
-              <a href="#" class="dropdown-toggle" id="staffDropdown" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Коллектив <span class="caret"></span></a>
-              <div class="dropdown-menu" aria-labelledby="staffDropdown">
-                <a href="{% url 'staff_admin' %}" class="dropdown-item">Администрация</a>
+              <a href="#" class="dropdown-toggle" id="condsDropdown" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Условия <span class="caret"></span></a>
+              <div class="dropdown-menu" aria-labelledby="condsDropdown">
+                <a href="{% url 'about_general' %}" class="dropdown-item">Режим работы</a>
+                <a href="{% url 'about_mto' %}" class="dropdown-item">Материально-техническое обеспечение</a>
+                <a href="{% url 'lessched' %}" class="dropdown-item">Расписание звонков</a>
                 <div class="dropdown-divider"></div>
-                <h6 class="dropdown-header"><a href="{% url 'staff_all' %}">Педагоги</a></h6>
-                <a href="{% url 'staff_elementary' %}" class="dropdown-item">Начальная школа</a>
-                <a href="{% url 'staff_not_elementary' %}" class="dropdown-item">Старшие классы</a>
+                <a href="{% url 'mealorg' %}" class="dropdown-header">Организация питания</a>
+                <a href="{% url 'food_table_list' %}" class="dropdown-item">Ежедневное меню в формате Excel</a>
+                <div class="dropdown-divider"></div>
+                <a href="{% url 'security' %}" class="dropdown-item">Безопасность</a>
+                <a href="{% url 'enrollment' %}" class="dropdown-item">Поступление в первый класс</a>
+                <a href="{% url 'heo_collab' %}" class="dropdown-item">Сотрудничество с высшими учебными заведениями</a>
+                <a href="{% url 'org_collab' %}" class="dropdown-item">Сотрудничество с предприятиями и организациями</a>
+              </div>
+            </li>
+            <li>
+                <a href="{% url 'about_financial' %}">Финансы</a>
+            </li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" id="linksDropdown" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Ссылки <span class="caret"></span></a>
+              <div class="dropdown-menu" aria-labelledby="linksDropdown">
+                <a href="{% url 'external_links' %}" class="dropdown-item">Электронные сервисы</a>
+                <a href="https://uslugi.mosreg.ru/obr/" target="_blank" class="dropdown-item">Школьный портал</a>
+                <a href="https://bus.gov.ru/info-card/357956" target="_blank" class="dropdown-item">Результаты независимой оценки качества<br/>государственных (муниципальных) организаций</a>
               </div>
             </li>
             <li class="dropdown">
-              <a href="#" class="dropdown-toggle" id="studyDropdown" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Учебный процесс <span class="caret"></span></a>
-              <div class="dropdown-menu" aria-labelledby="studyDropdown">
-                <a href="{% url 'curriculum' %}" class="dropdown-item">Учебный план</a>
-                <div class="dropdown-divider"></div>
-                <a href="{% url 'additional_education' %}" class="dropdown-item">Дополнительное образование</a>
-                <div class="dropdown-divider"></div>
-                <h6 class="dropdown-header">Этапы обучения</h6>
-                <a href="#" class="dropdown-item">Начальные классы</a>
-                <a href="#" class="dropdown-item">Средняя школа</a>
-                <a href="#" class="dropdown-item">Старшая школа</a>
-                <div class="dropdown-divider"></div>
-                <h6 class="dropdown-header">Экзамены</h6>
-                <a href="#" class="dropdown-item">ЕГЭ</a>
-                <a href="#" class="dropdown-item">ГИА</a>
-                <div class="dropdown-divider"></div>
-                <a href="{% url 'methodical_work' %}" class="dropdown-item">Методическая работа</a>
-                <div class="divider"></div>
-                <a href="#" class="dropdown-item">Электронные сервисы</a>
+              <a href="#" class="dropdown-toggle" id="feedbackDropdown" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Обратная связь <span class="caret"></span></a>
+              <div class="dropdown-menu" aria-labelledby="feedbackDropdown">
+                <a href="{% url 'feedback_site' %}" class="dropdown-item">Работа сайта</a>
+                <a href="{% url 'feedback_ticket' %}" class="dropdown-item">Электронное обращение</a>
+                <a href="{% url 'feedback_faq' %}" class="dropdown-item">Часто задаваемые вопросы</a>
+                <a href="{% url 'feedback_query' %}" class="dropdown-item">Анкета для опроса получателей услуг<br/>о качестве условий осуществления<br/>образовательной деятельности в МБОУ СОШ №7</a>
               </div>
             </li>
           </ul>
@@ -147,16 +233,224 @@
     </nav>
 
     <!-- Begin page content -->
-    <div class="container-fluid content bg-white">
+    <div class="container-fluid body-content">
       <div class="row">
-      {% if request.user.is_authenticated %}
-        {% block controls %}
+           {% block controls %}
           <nav class="col-sm-3 col-md-2 sidebar" role="group" aria-label="controls">
+             <div id="accordion" class="bg-primary">
+
+                 <div class="card">
+                     <div class="card-header card-menu" id="one">
+                         <h3 class="mb-0">
+                             <button class="btn btn-primary btn-menu btn-block text-break text-uppercase font-weight-bold" data-toggle="collapse" data-target="#contentOne" aria-expanded="true" aria-controls="contentOne">
+                                О школе
+                             </button>
+                         </h3>
+                     </div>
+                     <div id="contentOne" class="collapse" aria-labelledby="one" data-parent="#accordion">
+                       <div class="card-body bg-primary card-menu">
+                           <a href="#" class="card-link btn btn-primary btn-menu btn-block text-break text-uppercase text-uppercase font-weight-bold">История школы</a>
+                           <a href="#" class="card-link btn btn-primary btn-menu btn-block text-break text-uppercase text-uppercase font-weight-bold">Символика школы</a>
+                           <a href="{% url 'regional_contests' %}" class="card-link btn btn-primary btn-menu btn-block text-break text-uppercase font-weight-bold">Участие в региональных конкурсах</a>
+                           <a href="{% url 'albums_list' %}" class="card-link btn btn-primary btn-menu btn-block text-break text-uppercase font-weight-bold">Фотогалереи</a>
+                           <a href="{% url 'studgov' %}" class="card-link btn btn-primary btn-menu btn-block text-break text-uppercase font-weight-bold">Ученическое самоуправление</a>
+                           <a href="{% url 'vpk' %}" class="card-link btn btn-primary btn-menu btn-block text-break text-uppercase font-weight-bold">Детское общественное объединение Военно-патриотический клуб "Надежда России"</a>
+                           <a href="{% url 'el_journ' %}" class="card-link btn btn-primary btn-menu btn-block text-break text-uppercase font-weight-bold">Электронная газета "Школьная волна"</a>
+                           <a href="{% url 'school_press' %}" class="card-link btn btn-primary btn-menu btn-block text-break text-uppercase font-weight-bold">Школьный пресс-центр</a>
+                           <a href="{% url 'museum' %}" class="card-link btn btn-primary btn-menu btn-block text-break text-uppercase font-weight-bold">Школьный музей "Этнографическая экспозиция русского быта и народных промыслов"</a>
+                       </div>
+                     </div>
+                 </div>
+
+                <div class="card">
+                     <div class="card-header card-menu" id="two">
+                         <h3 class="mb-0">
+                             <button class="btn btn-primary btn-menu btn-block text-break text-uppercase font-weight-bold" data-toggle="collapse" data-target="#contentTwo" aria-expanded="true" aria-controls="contentTwo">
+                                Сведения об образовательной организации
+                             </button>
+                         </h3>
+                     </div>
+                     <div id="contentTwo" class="collapse" aria-labelledby="two" data-parent="#accordion">
+                       <div class="card-body bg-primary card-menu">
+                           <a href="{% url 'about_main' %}" class="card-link btn btn-primary btn-menu btn-block text-break text-uppercase font-weight-bold">Главная</a>
+                           <a href="{% url 'about_general' %}" class="card-link btn btn-primary btn-menu btn-block text-break text-uppercase font-weight-bold">Основные сведения</a>
+                           <a href="{% url 'about_structure' %}" class="card-link btn btn-primary btn-menu btn-block text-break text-uppercase font-weight-bold">Структура и органы управления образовательной организацией</a>
+                           <a href="{% url 'about_doc_refs' %}" class="card-link btn btn-primary btn-menu btn-block text-break text-uppercase font-weight-bold">Основные документы</a>
+                           <a href="{% url 'about_docs' %}" class="card-link btn btn-primary btn-menu btn-block text-break text-uppercase font-weight-bold">Документы</a>
+                           <a href="{% url 'about_education' %}" class="card-link btn btn-primary btn-menu btn-block text-break text-uppercase font-weight-bold">Образование</a>
+                           <a href="{% url 'about_standards' %}" class="card-link btn btn-primary btn-menu btn-block text-break text-uppercase font-weight-bold">Образовательные стандарты</a>
+                           <a href="{% url 'about_staff' %}" class="card-link btn btn-primary btn-menu btn-block text-break text-uppercase font-weight-bold">Руководство. Педагогический состав</a>
+                           <a href="{% url 'about_mto' %}" class="card-link btn btn-primary btn-menu btn-block text-break text-uppercase font-weight-bold">Материально-техническое обеспечение и оснащенность образовательного процесса</a>
+                           <a href="{% url 'about_support' %}" class="card-link btn btn-primary btn-menu btn-block text-break text-uppercase font-weight-bold">Стипендии и иные виды материальной поддержки</a>
+                           <a href="{% url 'about_additional' %}" class="card-link btn btn-primary btn-menu btn-block text-break text-uppercase font-weight-bold">Платные образовательные услуги</a>
+                           <a href="{% url 'about_financial' %}" class="card-link btn btn-primary btn-menu btn-block text-break text-uppercase font-weight-bold">Финансово-хозяйственная деятельность</a>
+                           <a href="{% url 'about_vacancies' %}" class="card-link btn btn-primary btn-menu btn-block text-break text-uppercase font-weight-bold">Вакантные места для приема(перевода)</a>
+                       </div>
+                     </div>
+                 </div>
+
+                 <div class="card">
+                     <div class="card-header card-menu" id="three">
+                         <h3 class="mb-0">
+                             <button class="btn btn-primary btn-menu btn-block text-break text-uppercase font-weight-bold" data-toggle="collapse" data-target="#contentThree" aria-expanded="true" aria-controls="contentThree">
+                                Деятельность
+                             </button>
+                         </h3>
+                     </div>
+                     <div id="contentThree" class="collapse" aria-labelledby="three" data-parent="#accordion">
+                       <div class="card-body bg-primary card-menu">
+                           <a href="{% url 'about_education' %}" class="card-link btn btn-primary btn-menu btn-block text-break text-uppercase font-weight-bold">Образовательная</a>
+                           <a href="{% url 'additional_education' %}" class="card-link btn btn-primary btn-menu btn-block text-break text-uppercase font-weight-bold">Объединения дополнительного образования</a>
+                           <a href="{% url 'about_standards' %}" class="card-link btn btn-primary btn-menu btn-block text-break text-uppercase font-weight-bold">ФГОС</a>
+                           <a href="{% url 'educational_programs' %}" class="card-link btn btn-primary btn-menu btn-block text-break text-uppercase font-weight-bold">Образовательные программы</a>
+                           <a href="{% url 'self_diagnosis' %}" class="card-link btn btn-primary btn-menu btn-block text-break text-uppercase font-weight-bold">Самообследование</a>
+                           <a href="{% url 'edu_work' %}" class="card-link btn btn-primary btn-menu btn-block text-break text-uppercase font-weight-bold">Воспитательная работа</a>
+                           <a href="{% url 'olymp' %}" class="card-link btn btn-primary btn-menu btn-block text-break text-uppercase font-weight-bold">Всероссийская олимпиада школьников</a>
+                           <a href="{% url 'org_collab' %}" class="card-link btn btn-primary btn-menu btn-block text-break text-uppercase font-weight-bold">Сотрудничество с предприятиями и организациями</a>
+                           <a href="{% url 'prof_orient' %}" class="card-link btn btn-primary btn-menu btn-block text-break text-uppercase font-weight-bold">Профориентация</a>
+                           <a href="{% url 'heo_collab' %}" class="card-link btn btn-primary btn-menu btn-block text-break text-uppercase font-weight-bold">Сотрудничество с ВУЗами</a>
+                           <a href="{% url 'projects' %}" class="card-link btn btn-primary btn-menu btn-block text-break text-uppercase font-weight-bold">Проектная деятельность</a>
+                           <a href="{% url 'sport' %}" class="card-link btn btn-primary btn-menu btn-block text-break text-uppercase font-weight-bold">Спорт</a>
+                       </div>
+                     </div>
+                 </div>
+
+                 <div class="card">
+                     <div class="card-header card-menu" id="four">
+                         <h3 class="mb-0">
+                             <button class="btn btn-primary btn-menu btn-block text-break text-uppercase font-weight-bold" data-toggle="collapse" data-target="#contentFour" aria-expanded="true" aria-controls="contentFour">
+                                Аттестация
+                             </button>
+                         </h3>
+                     </div>
+                     <div id="contentFour" class="collapse" aria-labelledby="four" data-parent="#accordion">
+                       <div class="card-body bg-primary card-menu">
+                           <a href="http://ege.edu.ru/" class="card-link btn btn-primary btn-menu btn-block text-break text-uppercase font-weight-bold">ЕГЭ</a>
+                           <a href="http://gia.edu.ru/" class="card-link btn btn-primary btn-menu btn-block text-break text-uppercase font-weight-bold">ОГЭ</a>
+                           <a href="#" class="card-link btn btn-primary btn-menu btn-block text-break text-uppercase font-weight-bold">Всероссийские проверочные работы</a>
+                       </div>
+                     </div>
+                 </div>
+
+                 <div class="card">
+                     <div class="card-header card-menu" id="five">
+                         <h3 class="mb-0">
+                             <button class="btn btn-primary btn-menu btn-block text-break text-uppercase font-weight-bold" data-toggle="collapse" data-target="#contentFive" aria-expanded="true" aria-controls="contentFive">
+                                Коллектив
+                             </button>
+                         </h3>
+                     </div>
+                     <div id="contentFive" class="collapse" aria-labelledby="five" data-parent="#accordion">
+                       <div class="card-body bg-primary card-menu">
+                           <a href="{% url 'about_staff' %}" class="card-link btn btn-primary btn-menu btn-block text-break text-uppercase font-weight-bold">персонал</a>
+                           <a href="{% url 'methodical_work' %}" class="card-link btn btn-primary btn-menu btn-block text-break text-uppercase font-weight-bold">методическая работа</a>
+                       </div>
+                     </div>
+                 </div>
+
+                 <div class="card">
+                     <div class="card-header card-menu" id="six">
+                         <h3 class="mb-0">
+                             <button class="btn btn-primary btn-menu btn-block text-break text-uppercase font-weight-bold" data-toggle="collapse" data-target="#contentSix" aria-expanded="true" aria-controls="contentSix">
+                                Документы
+                             </button>
+                         </h3>
+                     </div>
+                     <div id="contentSix" class="collapse" aria-labelledby="six" data-parent="#accordion">
+                        <div class="card-body bg-primary card-menu">
+                           {% if cats %}
+                           {% for category in cats %}
+                           <a href="{{ category.get_url }}" class="card-link btn btn-primary btn-menu btn-block text-break text-uppercase font-weight-bold">{{ category.name }}</a>
+                           {% endfor %}
+                           {% endif %}
+                           <a href="{% url 'docs_newest' %}" class="card-link btn btn-primary btn-menu btn-block text-break text-uppercase font-weight-bold">Все документы</a>
+                           <a href="{% url 'docs_search' %}" class="card-link btn btn-primary btn-menu btn-block text-break text-uppercase font-weight-bold">Поиск</a>
+                       </div>
+                     </div>
+                 </div>
+
+                 <div class="card">
+                     <div class="card-header card-menu" id="seven">
+                         <h3 class="mb-0">
+                             <button class="btn btn-primary btn-menu btn-block text-break text-uppercase font-weight-bold" data-toggle="collapse" data-target="#contentSeven" aria-expanded="true" aria-controls="contentSeven">
+                                Условия
+                             </button>
+                         </h3>
+                     </div>
+                     <div id="contentSeven" class="collapse" aria-labelledby="seven" data-parent="#accordion">
+                       <div class="card-body bg-primary card-menu">
+                           <a href="{% url 'about_general' %}" class="card-link btn btn-primary btn-menu btn-block text-break text-uppercase font-weight-bold">Режим работы</a>
+                           <a href="{% url 'about_mto' %}" class="card-link btn btn-primary btn-menu btn-block text-break text-uppercase font-weight-bold">Материально-техническое обеспечение</a>
+                           <a href="{% url 'lessched' %}" class="card-link btn btn-primary btn-menu btn-block text-break text-uppercase font-weight-bold">Расписание звонков</a>
+                           <a href="{% url 'mealorg' %}" class="card-link btn btn-primary btn-menu btn-block text-break text-uppercase font-weight-bold">Организация питания</a>
+                           <a href="{% url 'food_table_list' %}" class="card-link btn btn-primary btn-menu btn-block text-break text-uppercase font-weight-bold">Ежедневное меню в формате Excel</a>
+                           <a href="{% url 'security' %}" class="card-link btn btn-primary btn-menu btn-block text-break text-uppercase font-weight-bold">Безопасность</a>
+                           <a href="{% url 'enrollment' %}" class="card-link btn btn-primary btn-menu btn-block text-break text-uppercase font-weight-bold">Поступление в первый класс</a>
+                           <a href="{% url 'heo_collab' %}" class="card-link btn btn-primary btn-menu btn-block text-break text-uppercase font-weight-bold">Сотрудничество с высшими учебными заведениями</a>
+                           <a href="{% url 'org_collab' %}" class="card-link btn btn-primary btn-menu btn-block text-break text-uppercase font-weight-bold">Сотрудничество с предприятиями и организациями</a>
+                       </div>
+                     </div>
+                 </div>
+
+                 <div class="card">
+                     <div class="card-header card-menu" id="eight">
+                         <h3 class="mb-0">
+                             <a href="{% url 'about_financial' %}" class="card-link btn btn-primary btn-menu btn-block text-break text-uppercase font-weight-bold">Финансы</a>
+                         </h3>
+                     </div>
+                 </div>
+
+                 <div class="card">
+                     <div class="card-header card-menu" id="nine">
+                         <h3 class="mb-0">
+                             <button class="btn btn-primary btn-menu btn-block text-break text-uppercase font-weight-bold" data-toggle="collapse" data-target="#contentNine" aria-expanded="true" aria-controls="contentNine">
+                                Ссылки
+                             </button>
+                         </h3>
+                     </div>
+                     <div id="contentNine" class="collapse" aria-labelledby="nine" data-parent="#accordion">
+                       <div class="card-body bg-primary card-menu">
+                           <a href="{% url 'external_links' %}" class="card-link btn btn-primary btn-menu btn-block text-break text-uppercase font-weight-bold">Электронные сервисы</a>
+                            <a href="https://uslugi.mosreg.ru/obr/" target="_blank" class="card-link btn btn-primary btn-menu btn-block text-break text-uppercase font-weight-bold">Школьный портал</a>
+                            <a href="https://bus.gov.ru/info-card/357956" target="_blank" class="card-link btn btn-primary btn-menu btn-block text-break text-uppercase font-weight-bold">Результаты независимой оценки качества государственных (муниципальных) организаций</a>
+                       </div>
+                     </div>
+                 </div>
+
+                 <div class="card">
+                     <div class="card-header card-menu" id="ten">
+                         <h3 class="mb-0">
+                             <button class="btn btn-primary btn-menu btn-block text-break text-uppercase font-weight-bold" data-toggle="collapse" data-target="#contentTen" aria-expanded="true" aria-controls="contentTen">
+                                Обратная связь
+                             </button>
+                         </h3>
+                     </div>
+                     <div id="contentTen" class="collapse" aria-labelledby="ten" data-parent="#accordion">
+                       <div class="card-body bg-primary card-menu">
+                           <a href="{% url 'feedback_site' %}" class="card-link btn btn-primary btn-menu btn-block text-break text-uppercase font-weight-bold">Работа сайта</a>
+                           <a href="{% url 'feedback_ticket' %}" class="card-link btn btn-primary btn-menu btn-block text-break text-uppercase font-weight-bold">Электронное обращение</a>
+                           <a href="{% url 'feedback_faq' %}" class="card-link btn btn-primary btn-menu btn-block text-break text-uppercase font-weight-bold">Часто задаваемые вопросы</a>
+                           <a href="{% url 'feedback_query' %}" class="card-link btn btn-primary btn-menu btn-block text-break text-uppercase font-weight-bold">Анкета для опроса получателей услуг<br/>о качестве условий осуществления<br/>образовательной деятельности в МБОУ СОШ №7</a>
+                       </div>
+                     </div>
+                 </div>
+                 <div class="card">
+                     <div class="card-header card-menu" id="eleven">
+                         <h3 class="mb-0">
+                             <a class="btn btn-primary btn-menu btn-block text-break text-uppercase font-weight-bold" href="{% url 'p500_main' %}">
+                                 Проект 500+
+                             </a>
+                         </h3>
+                     </div>
+                 </div>
+            </div>
+
+            {% if request.user.is_authenticated %}
              <div class="page-header">
                <h6 class="text-center">Панель управления</h6>
                <h6 class="text-center">Здравствуйте, {{ request.user.get_full_name }}!</h6>
              </div>
-             <ul class="nav flex-column">
+             <ul class="nav flex-column mb-2">
                <li class="nav-item">
                    <a href="{% url 'profile-edit' %}" class="nav-link">
                        Редактировать профиль
@@ -179,6 +473,11 @@
                <li class="nav-item">
                    <a href="{% url 'document_add' %}" class="nav-link">
                        Добавить документ
+                   </a>
+               </li>
+               <li class="nav-item">
+                   <a href="{% url 'food_table_add' %}" class="nav-link">
+                       Добавить меню питания
                    </a>
                </li>
                <li class="nav-item">
@@ -207,19 +506,19 @@
                  </a>
                </li>
              </ul>
+          {% endif %}
           </nav>
-        {% endblock %}
-      {% endif %}
-        <main class="{% if request.user.is_authenticated %}col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2{%else%}w-100{% endif %} main clearfix">
+          {% endblock %}
+        <main id="content" class="col main clearfix">
           {% block content %}
           {% endblock %}
         </main>
       </div>
+        {% include "useful_links_embed.html" %}
     </div>
-
-    <footer class="footer bg-white">
+    <footer id="footer" class="footer">
       {% block footer %}
-      <div class="container" align = "center">
+      <div id="copyrights" class="container" align = "center">
         <p class="text-muted text-info">&#169; Все права защищены. 2013-{{ year|date:"Y" }}.</p>
       </div>
       {% endblock %}
@@ -228,10 +527,12 @@
 
     {% block scripts %}
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF" crossorigin="anonymous"></script>
+    <script src="{% static 'js/special.js' %}"></script>
+    <script src="https://cdn.plyr.io/3.6.2/plyr.js"></script>
+        {% block custom_scripts %}
+        {% endblock %}
     {% endblock %}
   </body>
 </html>

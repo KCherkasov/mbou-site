@@ -1,24 +1,24 @@
-﻿import re
-
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.forms.models import model_to_dict
-from django.http import Http404, HttpResponseRedirect
+from django.http import Http404, HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
 from django.urls import reverse
 from django.utils import timezone
 
+from mbou import settings
 from mbou import categories
 from mbou import miscellaneous
 from mbou.forms import AddNewsForm, LessonTimingForm, DocumentForm, SignInForm, \
-    ProfileEditForm, StaffMemberForm, PhotoAddForm, AlbumAddForm, UrlUserCreationForm
-from mbou.models import News, LessonTiming, Document, DocumentCategory, StaffMember, Album, UrlUser
+    ProfileEditForm, StaffMemberForm, PhotoAddForm, AlbumAddForm, UrlUserCreationForm, DocumentSearchForm, FoodTableForm
+from mbou.models import News, LessonTiming, Document, DocumentCategory, StaffMember, Album, UrlUser, FoodTable
 
 
 def index(request):
     return render(request, 'index.html', {"news": News.objects.all, 'year': timezone.now,
-                                          "cats": DocumentCategory.objects.get_top_X, })
+                                          "cats": DocumentCategory.objects.get_top_X,
+                                          "top_news": News.objects.get_top_X, })
 
 
 def base(request):
@@ -35,6 +35,9 @@ def news(request, id):
     return render(request, "news_one.html", {"n": news_entry, "news": News.objects.all, "year": timezone.now,
                                              "cats": DocumentCategory.objects.get_top_X, })
 
+def external_links(request):
+    return render(request, 'useful_links.html', {"news": News.objects.all, 'year': timezone.now,
+                                                 "cats": DocumentCategory.objects.get_top_X, })
 
 @login_required
 def news_add(request):
@@ -81,7 +84,7 @@ def document_show(request, title):
         doc.save()
     except Document.DoesNotExist:
         raise Http404()
-    doc_namext = re.split('[.]+', doc.doc.name)
+    doc_namext = doc.doc.name.split('.', maxsplit=2)
     if doc_namext[1] == 'pdf':
         is_pdf = True
     else:
@@ -103,6 +106,57 @@ def document_add(request):
     return render(request, "document_add.html", {'form': form, 'news': News.objects.all, 'year': timezone.now,
                                                  "cats": DocumentCategory.objects.get_top_X, })
 
+def food_table_show(request, name):
+    try:
+        ft = FoodTable.objects.get_by_title(name)
+        doc_namext = ft.doc.name.split('.', maxsplit=2)
+        ft.views_count = ft.views_count + 1
+        ft.save()
+    except FoodTable.DoesNotExist:
+        raise Http404()
+    if doc_namext[1] == 'pdf':
+        is_pdf = True
+    else:
+        is_pdf = False
+    return render(request, "food_table_show.html", {'ft': ft, 'news': News.objects.all, 'year': timezone.now,
+                                             "cats": DocumentCategory.objects.get_top_X, 'is_pdf': is_pdf, })
+
+def food_table_list(request):
+    fts = FoodTable.objects.all()
+    pagination = miscellaneous.paginate(fts, request, key='fts')
+    return render(request, 'food_table_list.html', {'title': u'Питание учащихся (таблицы меню)', 'news': News.objects.all,
+                                                    'year': timezone.now, 'fts': pagination,
+                                                    "cats": DocumentCategory.objects.get_top_X, })
+
+@login_required
+def food_table_add(request):
+    if request.method == 'POST':
+        form = FoodTableForm(request.POST, request.FILES)
+        if form.is_valid():
+            added = form.save()
+            return HttpResponseRedirect(reverse('food_table_show', kwargs={'name' : added.title_id, }))
+    else:
+        form = FoodTableForm()
+    return render(request, 'food_table_add.html', {'form': form, 'news': News.objects.all, 'year': timezone.now,
+                                                 "cats": DocumentCategory.objects.get_top_X, })
+
+def food_table_get(request, name):
+    print(name)
+    sh_name = str(name.split('.',maxsplit=2)[0])
+    print(sh_name)
+    try:
+        ft = FoodTable.objects.get_by_title(sh_name)
+        with open(settings.MEDIA_ROOT[:-6]+str(ft.doc_url()), 'rb') as file:
+            file_data = file.read()
+        response = HttpResponse(file_data, content_type='application/vnd.ms-excel')
+        response['Content-Disposition'] = 'attachment; filename="' + name + '"'
+    except FoodTable.DoesNotExist:
+        raise Http404()
+    except IOError:
+        response = render(request, 'food_table_list.html', {'title': u'Питание учащихся (таблицы меню)', 'news': News.objects.all,
+                                                    'year': timezone.now, 'fts': pagination,
+                                                    "cats": DocumentCategory.objects.get_top_X, })
+    return response;
 
 def docs_newest(request):
     documents = Document.objects.newest()
@@ -120,7 +174,7 @@ def docs_by_category(request, cat_name):
     except DocumentCategory.DoesNotExist:
         documents = Document.objects.newest()
     pagination = miscellaneous.paginate(documents, request, key='document')
-    return render(request, 'docs_list.html', {'title': u'Новые документы', 'news': News.objects.all,
+    return render(request, 'docs_list.html', {'title': u'Документы по категории', 'news': News.objects.all,
                                               'year': timezone.now, 'docs': pagination,
                                               'categories': DocumentCategory.objects.order_by_doc_count().all,
                                               "cats": DocumentCategory.objects.get_top_X, "cat_name": cat_name, })
@@ -133,11 +187,32 @@ def docs_by_cat_name(request, cat_name):
     except DocumentCategory.DoesNotExist:
         documents = Document.objects.newest()
     pagination = miscellaneous.paginate(documents, request, key='document')
-    return render(request, 'docs_list.html', {'title': u'Новые документы', 'news': News.objects.all,
+    return render(request, 'docs_list.html', {'title': u'Документы по категории', 'news': News.objects.all,
                                               'year': timezone.now, 'docs': pagination,
                                               'categories': DocumentCategory.objects.order_by_doc_count().all,
                                               "cats": DocumentCategory.objects.get_top_X, "cat_name": cat_name, })
 
+def docs_search_result(request, query):
+    result = Document.objects.search_by_title(query)
+    pagination = miscellaneous.paginate(result, request, key='document')
+    return render(request, 'docs_list.html', {'title': u'Результаты поиска', 'news': News.objects.all,
+                                              'year': timezone.now, 'docs': pagination,
+                                              'categories': DocumentCategory.objects.order_by_doc_count().all,
+                                              "cats": DocumentCategory.objects.get_top_X, "query": query})
+
+def docs_search(request):
+    if request.method == 'POST':
+        form = DocumentSearchForm(request.POST)
+        if form.is_valid():
+            query = form.cleaned_data['query']
+            return HttpResponseRedirect(reverse('docs_search_result', kwargs={ 'query': query }))
+        else:
+            return HttpResponseRedirect(reverse('docs_search'))
+    else:
+        form = DocumentSearchForm()
+    return render(request, 'docs_search.html', {'title': u'Поиск документов', 'news': News.objects.all,
+                                                'year': timezone.now, "cats": DocumentCategory.objects.get_top_X,
+                                                'form': form, })
 
 def about_main(request):
     return render(request, 'about_main.html', {"news": News.objects.all, 'year': timezone.now,
@@ -160,8 +235,16 @@ def about_staff(request):
 
 
 def about_standards(request):
-    return render(request, 'about_standards.html', {"news": News.objects.all, 'year': timezone.now,
-                                                    "cats": DocumentCategory.objects.get_top_X, })
+    try:
+        cat_obj = DocumentCategory.objects.get_by_name(categories.fgos_category)
+        documents = Document.objects.by_category(cat_obj)
+    except DocumentCategory.DoesNotExist:
+        documents = Document.objects.newest()
+    pagination = miscellaneous.paginate(documents, request, key='document')
+    return render(request, 'about_standards.html', {'title': u'Сведения об образовательной организации - образовательные стандарты', 'news': News.objects.all,
+                                                    'year': timezone.now, 'docs': pagination,
+                                                    'categories': DocumentCategory.objects.order_by_doc_count().all,
+                                                    "cats": DocumentCategory.objects.get_top_X, "cat_name": categories.fgos_category, })
 
 
 def about_structure(request):
@@ -173,6 +256,28 @@ def about_vacancies(request):
     return render(request, 'about_vacancies.html', {"news": News.objects.all, 'year': timezone.now,
                                                     "cats": DocumentCategory.objects.get_top_X, })
 
+def about_doc_refs(request):
+    return render(request, 'about_doc_refs.html', {"news": News.objects.all, 'year': timezone.now,
+                                                    "cats": DocumentCategory.objects.get_top_X, })
+
+def edu_work(request):
+    return render(request, 'edu_work.html', {"news": News.objects.all, 'year': timezone.now,
+                                             "cats": DocumentCategory.objects.get_top_X, })
+
+def control_results(request):
+    try:
+        cat_obj = DocumentCategory.objects.get_by_name(categories.check_acts)
+        documents = Document.objects.by_category(cat_obj)
+    except DocumentCategory.DoesNotExist:
+        documents = Document.objects.newest()
+    pagination = miscellaneous.paginate(documents, request, key='document')
+    return render(request, 'control_results.html', {'title': u'Сведения об образовательной организации - предписания органов, осуществляющих государственный контроль (надзор) в сфере образования, отчеты об исполнении таких предписаний', 'news': News.objects.all,
+                                                    'year': timezone.now, 'docs': pagination,
+                                                    'categories': DocumentCategory.objects.order_by_doc_count().all,
+                                                    "cats": DocumentCategory.objects.get_top_X, "cat_name": categories.check_acts, })
+
+def el_dist_study(request):
+    return docs_by_cat_name(request, categories.el_dist_study)
 
 def about_docs_all(request):
     return docs_by_cat_name(request, categories.about_docs_category)
@@ -191,7 +296,31 @@ def about_support(request):
 
 
 def about_additional(request):
+    return docs_by_cat_name(request, categories.paid_category)
+
+def additional(request):
     return docs_by_cat_name(request, categories.additional_category)
+
+def perf_control(request):
+    return docs_by_cat_name(request, categories.perf_control)
+
+def les_curriculum(request):
+    return docs_by_cat_name(request, categories.les_curriculum)
+
+def rp_annots(request):
+    return docs_by_cat_name(request, categories.rp_annots)
+
+def employment_rules(request):
+    return docs_by_cat_name(request, categories.employment_rules)
+
+def addsched(request):
+    return docs_by_cat_name(request, categories.addsched)
+
+def self_diagnosis(request):
+    return docs_by_cat_name(request, categories.self_diagnosis_category)
+
+def staff_doc(request):
+    return docs_by_cat_name(request, categories.staff_list_category)
 
 
 def educational_work(request):
@@ -206,12 +335,63 @@ def curriculum(request):
     return docs_by_cat_name(request, categories.curriculum_category)
 
 
+def schedule(request):
+    return docs_by_cat_name(request, categories.schedule_category)
+
+def lessched(request):
+    return docs_by_cat_name(request, categories.lessched)
+
+def mealorg(request):
+    return docs_by_cat_name(request, categories.mealorg)
+
+def security(request):
+    return docs_by_cat_name(request, categories.security)
+
+def anticovid(request):
+    return docs_by_cat_name(request, categories.anticovid)
+
+def psychped(request):
+    return docs_by_cat_name(request, categories.psychped)
+
+def pedpsych(request):
+    return docs_by_cat_name(request, categories.pedpsych)
+
+def socped(request):
+    return docs_by_cat_name(request, categories.socped)
+
+def socservice(request):
+    return docs_by_cat_name(request, categories.socservice)
+
+def mediation(request):
+    return docs_by_cat_name(request, categories.mediation)
+
+def p500_docs(request):
+    return docs_by_cat_name(request, categories.p500_plus)
+
+def younguard(request):
+    return docs_by_cat_name(request, categories.younguard)
+
+def municipal_task(request):
+    return docs_by_cat_name(request, categories.municipal_task_category)
+
+def extras(request):
+    return docs_by_cat_name(request, categories.extras_category)
+
+
 def annotations(request):
     return docs_by_cat_name(request, categories.annotations_category)
 
 
 def main_language(request):
-    return docs_by_category(request, categories.main_language_category)
+    return docs_by_cat_name(request, categories.main_language_category)
+
+
+def study(request):
+    return docs_by_cat_name(request, categories.study_category)
+
+
+def main_docs(request):
+    return docs_by_cat_name(request, categories.main_docs_category)
 
 
 def about_schedules(request):
@@ -224,6 +404,12 @@ def programs(request):
 
 def credentials(request):
     return docs_by_cat_name(request, categories.credits_category)
+
+def olymp(request):
+    return docs_by_cat_name(request, categories.olymp)
+
+def curriculum(request):
+    return docs_by_cat_name(request, categories.curriculum_category)
 
 
 def council(request):
@@ -245,6 +431,65 @@ def regional_contests(request):
 def school_standard(request):
     return docs_by_cat_name(request, categories.school_standard_category)
 
+def enrollment(request):
+    return docs_by_cat_name(request, categories.enrollment_category)
+
+def vpk(request):
+    return docs_by_cat_name(request, categories.vpk)
+
+def museum(request):
+    return docs_by_cat_name(request, categories.museum)
+
+def heo_collab(request):
+    return docs_by_cat_name(request, categories.heo_collab)
+
+def org_collab(request):
+    return docs_by_cat_name(request, categories.org_collab)
+
+def prof_orient(request):
+    return docs_by_cat_name(request, categories.prof_orient)
+
+def studgov(request):
+    return docs_by_cat_name(request, categories.studgov)
+
+def school_press(request):
+    return docs_by_cat_name(request, categories.press)
+
+def projs(request):
+    return docs_by_cat_name(request, categories.projs)
+
+def sport(request):
+    return docs_by_cat_name(request, categories.sport)
+
+def parents(request):
+    return docs_by_cat_name(request, categories.parents)
+
+def heads(request):
+    return docs_by_cat_name(request, categories.heads)
+
+def fairs(request):
+    return docs_by_cat_name(request, categories.fairs)
+
+def vector(request):
+    return docs_by_cat_name(request, categories.vector)
+
+def project_victory(request):
+    return docs_by_cat_name(request, categories.project_victory)
+
+def yid(request):
+    return docs_by_cat_name(request, categories.yid)
+
+def rds(request):
+    return docs_by_cat_name(request, categories.rds)
+
+def sections(request):
+    return docs_by_cat_name(request, categories.sections)
+
+def spsections(request):
+    return docs_by_cat_name(request, categories.spsections)
+
+def sections_full(request):
+    return docs_by_cat_name(request, categories.sections_full)
 
 def login(request):
     redirect = request.GET.get('continue', '/')
@@ -384,6 +629,29 @@ def album(request, album_id):
                                           'cats': DocumentCategory.objects.get_top_X,
                                           'album': album_entry, })
 
+def el_journ(request):
+    return render(request, 'el_journ.html', {'news': News.objects.all, 'year': timezone.now,
+                                          'cats': DocumentCategory.objects.get_top_X, })
+
+def feedback_site (request):
+    return render(request, 'feedback.html', {"news": News.objects.all, 'year': timezone.now,
+                                             "cats": DocumentCategory.objects.get_top_X,
+                                             "top_news": News.objects.get_top_X, })
+
+def feedback_ticket (request):
+    return render(request, 'feedback_ticket.html', {"news": News.objects.all, 'year': timezone.now,
+                                             "cats": DocumentCategory.objects.get_top_X,
+                                             "top_news": News.objects.get_top_X, })
+
+def feedback_query (request):
+    return render(request, 'feedback_query.html', {"news": News.objects.all, 'year': timezone.now,
+                                             "cats": DocumentCategory.objects.get_top_X,
+                                             "top_news": News.objects.get_top_X, })
+
+def feedback_faq(request):
+    return render(request, 'faq.html', {"news": News.objects.all, 'year': timezone.now,
+                                        "cats": DocumentCategory.objects.get_top_X,
+                                        "top_news": News.objects.get_top_X, })
 
 @login_required
 def user_management(request):
@@ -461,3 +729,8 @@ def add_user(request):
         form = UrlUserCreationForm()
         return render(request, 'add_user.html', {'news': News.objects.all, 'year': timezone.now,
                                                  'cats': DocumentCategory.objects.get_top_X, 'form': form, })
+
+
+def p500_main(request):
+    return render(request, 'p500_main.html', {'news': News.objects.all, 'year': timezone.now,
+                                              'cats': DocumentCategory.objects.get_top_X, })

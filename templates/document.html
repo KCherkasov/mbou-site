@@ -26,17 +26,17 @@
       </div>
     </div>
     <span class="divider" role="separator"></span>
-    <h1 class="text-center"> {{ doc.title }} </h1>
+    <h3 class="text-center"> {{ doc.title }} </h3>
   </div>
   {% if doc.description %}
     <p class="lead text-center"> {{ doc.description }} </p>
   {% endif %}
   {% if doc.doc_url %}
-    <div class="media" align="center">
+    <div class="media d-flex justify-content-center" align="center">
       {% if is_pdf %}
         <embed class="mbou-media" src="{{ doc.doc_url }}"></embed>
       {% else %}
-        <iframe class="mbou-media" src="http://docs.google.com/viewer?url={{ doc.doc_url }}&embedded=true"></iframe>
+        <iframe class="mbou-media" src="https://view.officeapps.live.com/op/embed.aspx?src={{ doc.doc_full_url }}"></iframe>
       {% endif %}
     </div>
   {% endif %}
@@ -46,6 +46,14 @@
         <a href="{{ category.get_url }}" class="categories-category categories-category-{{ category.get_color_display }}">{{ category.name }}</a>
       {% endfor %}
     </div>
+  {% endif %}
+  {% if doc.doc_url %}
+      {% if is_pdf %}
+
+      {% else %}
+        <span class="divider" role="separator"></span>
+        <div class="input-group-lg" align="center"><a class="card-link btn btn-success text-center" href="{{ doc.doc_full_url }}"><h5>Скачать</h5></a></div>
+      {% endif %}
   {% endif %}
   <span class="divider" role="separator"></span>
   <p class="text-muted" align="center">{% if request.user.is_authenticated %}Опубликовано {{ doc.pub_date }} {% endif %}Просмотров: {{ doc.views_count }}</p>

@@ -1,13 +1,206 @@
-﻿{% extends "news.html" %}
+{% extends "news.html" %}
 
 {% block title %} Главная {% endblock %}
 
 {% block content %}
 
-<div class="page-header">
+<div class="page-header text-primary">
   <h1 class="text-center"> Добро пожаловать на сайт МБОУ СОШ №7 г.Лобня! </h1>
 </div>
+<div class="media d-flex justify-content-center text-primary">
+<div class="card w-75 border-light" align="center" >
+  <div class="card-body text-primary">
+      <h2>Уважаемые родители и учащиеся!</h2><br/>
+      <!--
+      <a class="card-link btn btn-primary" href="http://www.sosh7-lobnya.ru/documents/Распоряжение_Министерства_Образования_Московской_области_№_Р-660_от_21.10.2021/" target="__blank"><h4>Распоряжение Министерства<br/>Образования Московской области<br/>№ Р-660 от 21.10.2021</h4></a>
+      <br/>
+      <a class="card-link btn btn-success" href="{% url 'lessched' %}" target="__blank"><h4>Режим работы школы</h4></a>
+      <br/>
+      <a class="card-link btn btn-success" href="{% url 'mealorg' %}" target="__blank"><h4>Организация питания</h4></a>
+      <br/>
+      <a class="card-link btn btn-success" href="{% url 'anticovid' %}" target="__blank"><h4>Профилактика COVID</h4></a>
+      <br/>
+      <a class="card-link btn btn-success" href="{% url 'about_structure' %}" target="__blank"><h4>Контакты администрации школы</h4></a>
+      <br/>
+      <a class="card-link btn btn-success" href="http://www.sosh7-lobnya.ru/documents/Календарный_учебный_график_на_2021-2022_учебный_год/" target="__blank"><h4>Календарный учебный график<br/>на 2021-2022 учебный год</h4></a>
+      <br/>
+      !-->
+  </div>
+  <div class="card-body">
+      <br/>
+      <hr/>
+      <br/>
+  </div>
+  <div class="card-body">
+    <div id="albumPhotosCarousel" class="carousel slide" data-interval="3500" data-ride="carousel" data-pause="false" style="z-index: 0">
+        <ol class="carousel-indicators">
+            <li data-target="#albumPhotosCarousel" data-slide-to="1" class="active"></li>
+            <li data-target="#albumPhotosCarousel" data-slide-to="2"></li>
+            <li data-target="#albumPhotosCarousel" data-slide-to="3"></li>
+            <li data-target="#albumPhotosCarousel" data-slide-to="4"></li>
+            <li data-target="#albumPhotosCarousel" data-slide-to="5"></li>
+            <li data-target="#albumPhotosCarousel" data-slide-to="6"></li>
+            <li data-target="#albumPhotosCarousel" data-slide-to="7"></li>
+            <li data-target="#albumPhotosCarousel" data-slide-to="8"></li>
+        </ol>
+        <div class="carousel-inner pull-center">
+            <div class="carousel-item active">
+                <img class="d-block w-50" src="{{ MEDIA_URL }}/pics/news_album/gripp1.png" alt=""/>
+                <!--<div class="carousel-caption d-none d-md-block">
+                    <h5>{{ photo.label }}</h5>
+                    <p>{{ photo.description }}</p>
+                </div>-->
+            </div>
+            <div class="carousel-item">
+                <img class="d-block w-50" src="{{ MEDIA_URL }}/pics/news_album/gripp2.jpg" alt=""/>
+                <!--<div class="carousel-caption d-none d-md-block">
+                    <h5>{{ photo.label }}</h5>
+                    <p>{{ photo.description }}</p>
+                </div>-->
+            </div>
+            <div class="carousel-item">
+                <img class="d-block w-50" src="{{ MEDIA_URL }}/pics/news_album/gripp3.jpg" alt=""/>
+                <!--<div class="carousel-caption d-none d-md-block">
+                    <h5>{{ photo.label }}</h5>
+                    <p>{{ photo.description }}</p>
+                </div>-->
+            </div>
+            <div class="carousel-item">
+                <img class="d-block w-50" src="{{ MEDIA_URL }}/pics/news_album/gripp4.jpg" alt=""/>
+                <!--<div class="carousel-caption d-none d-md-block">
+                    <h5>{{ photo.label }}</h5>
+                    <p>{{ photo.description }}</p>
+                </div>-->
+            </div>
+            <div class="carousel-item">
+                <img class="d-block w-50" src="{{ MEDIA_URL }}/pics/news_album/gripp5.jpg" alt=""/>
+                <!--<div class="carousel-caption d-none d-md-block">
+                    <h5>{{ photo.label }}</h5>
+                    <p>{{ photo.description }}</p>
+                </div>-->
+            </div>
+            <div class="carousel-item">
+                <img class="d-block w-50" src="{{ MEDIA_URL }}/pics/news_album/gripp6.png" alt=""/>
+                <!--<div class="carousel-caption d-none d-md-block">
+                    <h5>{{ photo.label }}</h5>
+                    <p>{{ photo.description }}</p>
+                </div>-->
+            </div>
+            <div class="carousel-item">
+                <img class="d-block w-50" src="{{ MEDIA_URL }}/pics/news_album/covid1.jpg" alt=""/>
+                <!--<div class="carousel-caption d-none d-md-block">
+                    <h5>{{ photo.label }}</h5>
+                    <p>{{ photo.description }}</p>
+                </div>-->
+            </div>
+            <div class="carousel-item">
+                <img class="d-block w-50" src="{{ MEDIA_URL }}/pics/news_album/covid2.jpg" alt=""/>
+                <!--<div class="carousel-caption d-none d-md-block">
+                    <h5>{{ photo.label }}</h5>
+                    <p>{{ photo.description }}</p>
+                </div>-->
+            </div>
+        </div>
+        <!--<a class="carousel-control-prev" href="#albumPhotosCarousel" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+        </a>
+        <a class="carousel-control-next" href="#albumPhotosCarousel" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+        </a>-->
+    </div>
+  </div>
+  <div class="card-body">
+      <br/>
+      <hr/>
+      <br/>
+  </div>
+  <div class="card-body text-danger">
+    <h3 class="card-text">Просим вас и ваших детей  максимально соблюдать личную технику безопасности‼️ Берегите себя и ваших близких!</h3>
+  </div>
+  <div class="card-body">
+      <br/>
+      <br/>
+  </div>
+</div>
+</div>
 
-<p class="lead text-center">Мы рады Вас видеть!</p>
+<span class="divider" role="separator"></span>
 
+<script src='https://pos.gosuslugi.ru/bin/script.min.js'></script>
+
+<div id='js-show-iframe-wrapper'>
+  <div class='pos-banner-fluid bf-2'>
+    <div class='bf-2__decor'>
+      <div class='bf-2__logo-wrap'>
+        <img class='bf-2__logo' src='https://pos.gosuslugi.ru/bin/banner-fluid/gosuslugi-logo.svg' alt='Госуслуги'/>
+        <div class='bf-2__slogan'>Решаем вместе</div >
+      </div>
+    </div>
+    <div class='bf-2__content'>
+      <div class='bf-2__description'>
+          <span class='bf-2__text'>
+            Не убран мусор, яма на дороге, не горит фонарь?
+          </span >
+        <span class='bf-2__text bf-2__text_small'>
+            Столкнулись с проблемой&nbsp;— сообщите о ней!
+        </span >
+      </div >
+      <div class='bf-2__btn-wrap'>
+        <!-- pos-banner-btn_2 не удалять; другие классы не добавлять -->
+        <button class='pos-banner-btn_2' type='button'>
+            Сообщить о проблеме
+        </button >
+      </div >
+    </div >
+  </div >
+</div >
+<script>
+(function(){
+"use strict";function ownKeys(e,t){var o=Object.keys(e);if(Object.getOwnPropertySymbols){var n=Object.getOwnPropertySymbols(e);if(t)n=n.filter(function(t){return Object.getOwnPropertyDescriptor(e,t).enumerable});o.push.apply(o,n)}return o}function _objectSpread(e){for(var t=1;t<arguments.length;t++){var o=null!=arguments[t]?arguments[t]:{};if(t%2)ownKeys(Object(o),true).forEach(function(t){_defineProperty(e,t,o[t])});else if(Object.getOwnPropertyDescriptors)Object.defineProperties(e,Object.getOwnPropertyDescriptors(o));else ownKeys(Object(o)).forEach(function(t){Object.defineProperty(e,t,Object.getOwnPropertyDescriptor(o,t))})}return e}function _defineProperty(e,t,o){if(t in e)Object.defineProperty(e,t,{value:o,enumerable:true,configurable:true,writable:true});else e[t]=o;return e}var POS_PREFIX_2="--pos-banner-fluid-2__",posOptionsInitial={"grid-template-columns":"100%","grid-template-rows":"310px auto","decor-grid-column":"initial","decor-grid-row":"initial","decor-padding":"30px 30px 0 30px","bg-url":"url('https://pos.gosuslugi.ru/bin/banner-fluid/2/banner-fluid-bg-2-small.svg')","bg-position":"calc(10% + 64px) calc(100% - 20px)","bg-size":"cover","content-padding":"0 30px 30px 30px","slogan-font-size":"20px","slogan-line-height":"32px","logo-wrap-padding":"20px 30px 30px 40px","logo-wrap-top":"0","logo-wrap-bottom":"initial","logo-wrap-border-radius":"0 0 0 80px"},setStyles=function(e,t){Object.keys(e).forEach(function(o){t.style.setProperty(POS_PREFIX_2+o,e[o])})},removeStyles=function(e,t){Object.keys(e).forEach(function(e){t.style.removeProperty(POS_PREFIX_2+e)})};function changePosBannerOnResize(){var e=document.documentElement,t=_objectSpread({},posOptionsInitial),o=document.getElementById("js-show-iframe-wrapper"),n=o?o.offsetWidth:document.body.offsetWidth;if(n>405)t["slogan-font-size"]="24px",t["logo-wrap-padding"]="30px 50px 30px 70px";if(n>500)t["grid-template-columns"]="min-content 1fr",t["grid-template-rows"]="100%",t["decor-grid-column"]="2",t["decor-grid-row"]="1",t["decor-padding"]="30px 30px 30px 0",t["content-padding"]="30px",t["bg-position"]="0% calc(100% - 70px)",t["logo-wrap-padding"]="30px 30px 24px 40px",t["logo-wrap-top"]="initial",t["logo-wrap-bottom"]="0",t["logo-wrap-border-radius"]="80px 0 0 0";if(n>585)t["bg-position"]="0% calc(100% - 6px)";if(n>800)t["bg-url"]="url('https://pos.gosuslugi.ru/bin/banner-fluid/2/banner-fluid-bg-2.svg')",t["bg-position"]="0% center";if(n>1020)t["slogan-font-size"]="32px",t["line-height"]="40px",t["logo-wrap-padding"]="30px 30px 24px 50px";setStyles(t,e)}changePosBannerOnResize(),window.addEventListener("resize",changePosBannerOnResize),window.onunload=function(){var e=document.documentElement;window.removeEventListener("resize",changePosBannerOnResize),removeStyles(posOptionsInitial,e)};
+})()
+</script>
+<script>Widget("https://pos.gosuslugi.ru/form", 246304)</script>
+
+<span class="divider" role="separator"></span>
+
+<div class="media d-flex justify-content-center text-primary">
+    <h2>Новостная лента</h2>
+</div>
+<div class="media d-flex justify-content-center text-primary">
+<div class="card-deck w-50">
+  {% for entry in top_news %}
+  <div class="card w-50">
+    {% if entry.pic %}
+    <img class="card-img-top" src="{{ entry.pic_url }}" alt="Card image cap">
+    {%endif%}
+    <div class="card-body">
+      <h5 class="card-title"><a href="{{entry.get_url}}">{{ entry.title }}</a></h5>
+      <p class="card-text">{{ entry.content }}</p>
+      <p class="card-text text-muted">{% if user.is_authenticated %}Опубликовано {{ entry.pub_date }} {% endif %}Просмотров: {{ entry.views_count }}</p>
+      <a href="{{ entry.doc_url }}" class="card-link btn btn-primary">Подробнее</a>
+     </div>
+  </div>
+      {% if forloop.counter|divisibleby:2 %}
+  </div>
+  </div>
+  <div class="media d-flex justify-content-center text-primary">
+  <div class="card-deck w-50">
+  {% endif %}
+      {% if not forloop.counter|divisibleby:2 and forloop.last %}
+        </div>
+        </div>
+      {% endif %}
+  {% endfor %}
+
+<span class="divider" role="separator"></span>
+
+{% endblock %}
+
+{% block custom_scripts %}
+<script>
+    //document.getElementById('vid').play();
+    const player = new Plyr('#player')
+</script>
 {% endblock %}

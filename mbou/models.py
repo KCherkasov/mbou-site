@@ -12,12 +12,20 @@ from django.utils import timezone
 
 from mbou import subjects
 
+class NewsManager(models.Manager):
+    def get_top_X(self, top_size=10):
+        real_top = top_size
+        return self.all()[:real_top]
 
 class News(models.Model):
     title = models.TextField()
     content = models.TextField()
     pub_date = models.DateTimeField(default=timezone.now)
     views_count = models.PositiveIntegerField(default=0)
+    doc_url = models.TextField(default = '')
+    pic = models.FileField(upload_to="pics", blank=True, default=None)
+
+    objects = NewsManager()
 
     def get_by_title(self, title):
         return self.get(title=title)
@@ -30,6 +38,15 @@ class News(models.Model):
 
     def get_url(self):
         return reverse('news', kwargs={'id': self.id, })
+
+    def get_doc_url(self):
+        return self.doc_url
+
+    def pic_url(self):
+        if self.pic and hasattr(self.pic, "url"):
+            return self.pic.url
+        else:
+            return None
 
     class Meta:
         ordering = ['-pub_date', '-views_count']
@@ -113,6 +130,9 @@ class DocumentManager(models.Manager):
     def get_by_title(self, title):
         return self.get(title_id=title)
 
+    def search_by_title(self, title):
+        return self.filter(title__icontains=title)
+
 
 class Document(models.Model):
     title = models.TextField()
@@ -134,12 +154,58 @@ class Document(models.Model):
         else:
             return None
 
+    def doc_full_url(self):
+        if self.doc and hasattr(self.doc, "url"):
+            return 'http://www.sosh7-lobnya.ru'+self.doc.url
+        else:
+            return None
+
     def make_title_id(self):
         return re.sub(' +', '_', self.title)
 
     class Meta:
         ordering = ['-pub_date', '-views_count']
 
+class FoodTableManager(models.Manager):
+    def get_by_title(self, title):
+        return self.get(title_id=title)
+
+class FoodTable(models.Model):
+    year = models.CharField(max_length=4)
+    month = models.CharField(max_length=2)
+    day = models.CharField(max_length=2)
+    doc = models.FileField(upload_to="food")
+    is_minor = models.CharField(max_length=2)
+    title_id = models.CharField(max_length=15)
+    pub_date = models.DateTimeField(default=timezone.now)
+    views_count = models.IntegerField(default=0)
+
+    objects = FoodTableManager()
+
+    def url(self):
+        return reverse('food_table_show', kwargs={'name': self.title_id, })
+
+    def doc_url(self):
+        if self.doc and hasattr(self.doc, "url"):
+            return self.doc.url
+        else:
+            return None
+
+    def doc_full_url(self):
+        if self.doc and hasattr(self.doc, "url"):
+            return 'http://www.sosh7-lobnya.ru'+self.doc.url
+        else:
+            return None
+
+    def make_title(self):
+        title = self.year+'-'+self.month+'-'+self.day+'-'+self.is_minor
+        return title
+
+    def minor(self):
+        return self.is_minor == 'sm'
+
+    class Meta:
+        ordering = ['-pub_date', ]
 
 class SubjectManager(models.Manager):
     def get_by_title(self, title):

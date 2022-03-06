@@ -1,13 +1,14 @@
-def paginate(objects, request, key=''):
+OBJS_PER_PAGE = 8
+
+def paginate(objects, request, key='', opp=OBJS_PER_PAGE):
     from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
     key = key + '_page'
 
-    OBJS_PER_PAGE = 8
     PAGES_LEFT_RIGHT = 4
 
     page = request.GET.get(key)
-    paginator = Paginator(objects, OBJS_PER_PAGE)
+    paginator = Paginator(objects, opp)
 
     try:
         result = paginator.page(page)

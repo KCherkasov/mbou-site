@@ -5,13 +5,13 @@
 {% endblock %}
 
 {% block content %}
-    <div class="page-header">
+    <div class="page-header d-flex justify-content-center">
         <h2>Руководство. Педагогический состав</h2>
     </div>
     <hr/>
     <ul style="list-style: none">
         <li>
-            <b><a href="{% url 'staff_admin' %}" style="text-decoration: none">Администрация МБОУ СОШ №7</a>:</b>
+            <b><a href="{% if members %}{% url 'staff_admin' %}{% else %}#{% endif %}" style="text-decoration: none">Администрация МБОУ СОШ №7</a>:</b>
             <ul style="list-style: none">
                 {% if members %}
                     {% for staff_member in members %}
@@ -38,12 +38,132 @@
                             </ul>
                         </li>
                     {% endfor %}
+                {% else %}
+                	<li>
+                    <p><b><i>Директор:</i></b>&nbsp;Черкасова Марина Николаевна</p>
+                    <ul style="list-style: none">
+                        <li>
+                            <p>
+                                <b><i>Электронная почта:</i></b>&nbsp;
+                                <a href="mailto:lobn_sh7@mosreg.ru" style="text-decoration: none">lobn_sh7@mosreg.ru</a>
+                            </p>
+                        </li>
+                        <li>
+                            <p>Телефон: +7(495)577-33-53 </p>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <p><b><i>Заместитель директора по УВР:</i></b>&nbsp;Блажко Алевтина Александровна</p>
+                    <ul style="list-style: none">
+                        <li>
+                            <p>
+                                <b><i>Электронная почта:</i></b>&nbsp;
+                                <a href="mailto:lobn_sh7@mosreg.ru" style="text-decoration: none">lobn_sh7@mosreg.ru</a>
+                            </p>
+                        </li>
+                        <li>
+                            <p>Телефон: +7(495)577-15-21 </p>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <p><b><i>Заместитель директора УВР:</i></b>&nbsp;Якушева Ольга Юрьевна</p>
+                    <ul style="list-style: none">
+                        <li>
+                            <p>
+                                <b><i>Электронная почта:</i></b>&nbsp;
+                                <a href="mailto:lobn_sh7@mosreg.ru" style="text-decoration: none">lobn_sh7@mosreg.ru</a>
+                            </p>
+                        </li>
+                        <li>
+                            <p>Телефон: +7(495)577-15-21 </p>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <p>
+                        <b><i>
+                            Заместитель директора по учебно-методической работе:
+                        </i></b>
+                        &nbsp;Ганичкина Марина Павловна
+                    </p>
+                    <ul style="list-style: none">
+                        <li>
+                            <p>
+                                <b><i>Электронная почта:</i></b>&nbsp;
+                                <a href="mailto:lobn_sh7@mosreg.ru" style="text-decoration: none">lobn_sh7@mosreg.ru</a>
+                            </p>
+                        </li>
+                        <li>
+                            <p>Телефон: +7(495)577-15-21 </p>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <p>
+                        <b><i>
+                            Заместитель директора по информатизации образовательного процесса:
+                        </i></b>
+                        &nbsp;Дорина Татьяна Геннадьевна
+                    </p>
+                    <ul style="list-style: none">
+                        <li>
+                            <p>
+                                <b><i>Электронная почта:</i></b>&nbsp;
+                                <a href="mailto:lobn_sh7@mosreg.ru" style="text-decoration: none">lobn_sh7@mosreg.ru</a>
+                            </p>
+                        </li>
+                        <li>
+                            <p>Телефон: +7(495)577-15-21 </p>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <p><b><i>Заместитель директора по ВР:</i></b>&nbsp;Михальчук Евгения Евгеньевна</p>
+                    <ul style="list-style: none">
+                        <li>
+                            <p>
+                                <b><i>Электронная почта:</i></b>&nbsp;
+                                <a href="mailto:lobn_sh7@mosreg.ru" style="text-decoration: none">lobn_sh7@mosreg.ru</a>
+                            </p>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <p><b><i>Заместитель директора по безопасности:</i></b>&nbsp; Смирнова Ирина Владимировна</p>
+                    <ul style="list-style: none">
+                        <li>
+                            <p>
+                                <b><i>Электронная почта:</i></b>&nbsp;
+                                <a href="mailto:lobn_sh7@mosreg.ru" style="text-decoration: none">lobn_sh7@mosreg.ru</a>
+                            </p>
+                        </li>
+                        <li>
+                            <p>Телефон: +7(495)577-15-21 </p>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <p><b><i>Заместитель директора по АХЧ:</i></b>&nbsp;Дмитриева Римма Ришатовна</p>
+                    <ul style="list-style: none">
+                        <li>
+                            <p>
+                                <b><i>Электронная почта:</i></b>&nbsp;
+                                <a href="mailto:lobn_sh7@mosreg.ru" style="text-decoration: none">lobn_sh7@mosreg.ru</a>
+                            </p>
+                        </li>
+                        <li>
+                            <p>Телефон: +7(495)577-15-21 </p>
+                        </li>
+                    </ul>
+                </li>
                 {% endif %}
             </ul>
         </li>
         <li><hr/></li>
         <li>
-            <a href="{% url 'staff_all' %}" style="text-decoration: none"><b>Педагогический состав МБОУ СОШ №7</b></a>
+            <a href="{% if members %}{% url 'staff_all' %}{% else %}{% url 'staff_doc' %}{% endif %}" style="text-decoration: none"><b>Педагогический состав МБОУ СОШ №7</b></a>
         </li>
         <li><hr/></li>
     </ul>

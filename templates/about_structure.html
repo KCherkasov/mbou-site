@@ -5,8 +5,8 @@
 {% endblock %}
 
 {% block content %}
-    <div class="page-header">
-        <h2>Структура и органы управления образовательной организацией</h2> 
+    <div class="page-header d-flex justify-content-center">
+        <h2>Структура и органы управления образовательной организацией</h2>
     </div>
     <p><b><i>Структурных подразделений и филиалов МБОУ СОЩ №7 г. Лобня <u>не имеет</u></i></b></p>
     <hr/>
@@ -19,10 +19,7 @@
                         Московская область, г. Лобня, ул. Ленина, д. 21 </p>
                 </li>
                 <li><p><b><i>Телефон:</i></b> (495)577-12-43</p></li>
-                <li>
-                    <p><b><i>Электронная почта:</i></b> <a href="mailto:lobadm@lobadm.ru">lobadm@lobadm.ru</a></p>
-                </li>
-                <li><b><i><a href="http://лобня.рф" style="text-decoration: none">Официальный сайт</a></i></b></li>
+                <li><b><i><a href="http://лобня.рф" target="_blank" style="text-decoration: none">Официальный сайт</a></i></b></li>
             </ul>
         </li>
         <li>
@@ -44,8 +41,8 @@
                 <li>
                     <p>
                         <b><i>Электронная почта:</i></b>&nbsp;
-                        <a href="mailto:obrazovanie@lobnya.com" style="text-decoration: none;">
-                            obrazovanie@lobnya.com
+                        <a href="mailto:uo-lobnyago@mosreg.ru" style="text-decoration: none;">
+                            uo-lobnyago@mosreg.ru
                         </a>
                     </p>
                 </li>
@@ -56,12 +53,17 @@
         </li>
         <li>
             <hr/>
-            <b>МБОУ СОШ №7 города Лобня</b><a href="#" style="text-decoration: none">структура</a>
+            <b>МБОУ СОШ №7 города Лобня</b>&nbsp;<a href="#" style="text-decoration: none">структура</a>
             <br/>
             <ul style="list-style: none">
                 <li>
-                    <b><i><a href="#" style="text-decoration: none">
-                        Календарный учебный график на 2017-2018 учебный год
+                    <b><i><a href="{% url 'schedule' %}" style="text-decoration: none">
+                        Календарный учебный график
+                    </a></i></b>
+                </li>
+                <li>
+                    <b><i><a href="{% url 'lessched' %}" style="text-decoration: none">
+                        Расписание звонков
                     </a></i></b>
                 </li>
             </ul>
@@ -73,10 +75,11 @@
                         <li>
                             <p>
                                 <b><i>Электронная почта:</i></b>&nbsp;
-                                <a href="mailto:sosh7lobnya@inbox.ru" style="text-decoration: none">
-                                    sosh7lobnya@inbox.ru
-                                </a>
+                                <a href="mailto:lobn_sh7@mosreg.ru" style="text-decoration: none">lobn_sh7@mosreg.ru</a>
                             </p>
+                        </li>
+                        <li>
+                            <p>Телефон: +7(495)577-33-53 </p>
                         </li>
                     </ul>
                 </li>
@@ -86,10 +89,11 @@
                         <li>
                             <p>
                                 <b><i>Электронная почта:</i></b>&nbsp;
-                                <a href="mailto:sosh7lobnya@inbox.ru" style="text-decoration: none">
-                                    sosh7lobnya@inbox.ru
-                                </a>
+                                <a href="mailto:lobn_sh7@mosreg.ru" style="text-decoration: none">lobn_sh7@mosreg.ru</a>
                             </p>
+                        </li>
+                        <li>
+                            <p>Телефон: +7(495)577-15-21 </p>
                         </li>
                     </ul>
                 </li>
@@ -99,23 +103,11 @@
                         <li>
                             <p>
                                 <b><i>Электронная почта:</i></b>&nbsp;
-                                <a href="mailto:sosh7lobnya@inbox.ru" style="text-decoration: none">
-                                    sosh7lobnya@inbox.ru
-                                </a>
+                                <a href="mailto:lobn_sh7@mosreg.ru" style="text-decoration: none">lobn_sh7@mosreg.ru</a>
                             </p>
                         </li>
-                    </ul>
-                </li>
-                <li>
-                    <p><b><i>Заместитель директора по УВР:</i></b>&nbsp;Трошина Илона Александровна</p>
-                    <ul style="list-style: none">
                         <li>
-                            <p>
-                                <b><i>Электронная почта:</i></b>&nbsp;
-                                <a href="mailto:sosh7lobnya@inbox.ru" style="text-decoration: none">
-                                    sosh7lobnya@inbox.ru
-                                </a>
-                            </p>
+                            <p>Телефон: +7(495)577-15-21 </p>
                         </li>
                     </ul>
                 </li>
@@ -130,10 +122,11 @@
                         <li>
                             <p>
                                 <b><i>Электронная почта:</i></b>&nbsp;
-                                <a href="mailto:sosh7lobnya@inbox.ru" style="text-decoration: none">
-                                    sosh7lobnya@inbox.ru
-                                </a>
+                                <a href="mailto:lobn_sh7@mosreg.ru" style="text-decoration: none">lobn_sh7@mosreg.ru</a>
                             </p>
+                        </li>
+                        <li>
+                            <p>Телефон: +7(495)577-15-21 </p>
                         </li>
                     </ul>
                 </li>
@@ -148,10 +141,11 @@
                         <li>
                             <p>
                                 <b><i>Электронная почта:</i></b>&nbsp;
-                                <a href="mailto:sosh7lobnya@inbox.ru" style="text-decoration: none">
-                                    sosh7lobnya@inbox.ru
-                                </a>
+                                <a href="mailto:lobn_sh7@mosreg.ru" style="text-decoration: none">lobn_sh7@mosreg.ru</a>
                             </p>
+                        </li>
+                        <li>
+                            <p>Телефон: +7(495)577-15-21 </p>
                         </li>
                     </ul>
                 </li>
@@ -161,36 +155,36 @@
                         <li>
                             <p>
                                 <b><i>Электронная почта:</i></b>&nbsp;
-                                <a href="mailto:sosh7lobnya@inbox.ru" style="text-decoration: none">
-                                    sosh7lobnya@inbox.ru
-                                </a>
+                                <a href="mailto:lobn_sh7@mosreg.ru" style="text-decoration: none">lobn_sh7@mosreg.ru</a>
                             </p>
                         </li>
                     </ul>
                 </li>
                 <li>
-                    <p><b><i>Заместитель директора по безопасности:</i></b>&nbsp;</p>
+                    <p><b><i>Заместитель директора по безопасности:</i></b>&nbsp; Смирнова Ирина Владимировна</p>
                     <ul style="list-style: none">
                         <li>
                             <p>
                                 <b><i>Электронная почта:</i></b>&nbsp;
-                                <a href="mailto:sosh7lobnya@inbox.ru" style="text-decoration: none">
-                                    sosh7lobnya@inbox.ru
-                                </a>
+                                <a href="mailto:lobn_sh7@mosreg.ru" style="text-decoration: none">lobn_sh7@mosreg.ru</a>
                             </p>
+                        </li>
+                        <li>
+                            <p>Телефон: +7(495)577-15-21 </p>
                         </li>
                     </ul>
                 </li>
                 <li>
-                    <p><b><i>Заместитель директора по АХЧ:</i></b>&nbsp;Степанян Наталья Георгиевна</p>
+                    <p><b><i>Заместитель директора по АХЧ:</i></b>&nbsp;Дмитриева Римма Ришатовна</p>
                     <ul style="list-style: none">
                         <li>
                             <p>
                                 <b><i>Электронная почта:</i></b>&nbsp;
-                                <a href="mailto:sosh7lobnya@inbox.ru" style="text-decoration: none">
-                                    sosh7lobnya@inbox.ru
-                                </a>
+                                <a href="mailto:lobn_sh7@mosreg.ru" style="text-decoration: none">lobn_sh7@mosreg.ru</a>
                             </p>
+                        </li>
+                        <li>
+                            <p>Телефон: +7(495)577-15-21 </p>
                         </li>
                     </ul>
                 </li>

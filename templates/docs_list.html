@@ -4,11 +4,15 @@
 
 {% endif %}
 
-{% block title %}{{ title }}{% endblock %}
+{% block title %}{{ title }} {% if query %} по запросу {{ query }} {% endif %}{% endblock %}
 
 {% block content %}
+  {% block preceeding %}
+
+  {% endblock %}
+  <hr/>
   <div class="page-header">
-    <h1 class="text-center">Документы: {% if cat_name %} категория "{{ cat_name }}" {% else %} по дате добавления {% endif %}</h1>
+    <h1 class="text-center">Документы: {% if cat_name %} категория "{{ cat_name }}" {% elif query %} по запросу "{{ query }}" {% else %} по дате добавления {% endif %}</h1>
     <div class="btn-group-lg" align="center">
       <div class="btn-group" role="group">
           <a href="{% url 'docs_newest' %}" class="btn btn-success" role="button">Все документы (по дате добавления)</a>
@@ -26,6 +30,7 @@
           {% endif %}
           </div>
           <hr/>
+          <a href="{% url 'docs_search' %}" class="btn btn-success" role="button">Поиск по названию</a>
       </div>
     </div>
   </div>
@@ -34,9 +39,9 @@
     {% for doc in docs %}
       <div class="card document-{% if forloop.counter|divisibleby:2 %}white{% else %}grey{% endif %}">
         <div class="document-header">
-          <h6 class="card-title text-center">
+          <h4 class="card-title text-center">
             <a href="{{ doc.url }}">{{ doc.title }}</a>
-          </h6>
+          </h4>
         </div>
         <div class="card-body">
           <p class="card-text text-center">{{ doc.description }}</p>

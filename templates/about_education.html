@@ -5,12 +5,17 @@
 {% endblock %}
 
 {% block content %}
-    <div class="page-header">
+    <div class="page-header d-flex justify-content-center">
         <h2>Образование</h2>
     </div>
     <ul style="list-style: none">
         <li>
-            <h3>Реализуемые уровни образования</h3>
+            <h4>
+                <a href="{% url 'main_docs' %}">Учредительные документы</a>
+            </h4>
+        </li>
+        <li>
+            <h3 class="text-align-center">Реализуемые уровни образования</h3>
             <ul style="list-style: none">
                 <li>
                     <h4>Общее образование</h4>
@@ -30,7 +35,7 @@
         </li>
         <li><hr/></li>
         <li>
-            <h3>Формы обучения</h3>
+            <h3 class="text-align-center">Формы обучения</h3>
             <table>
                 <tbody>
                     <tr>
@@ -120,7 +125,7 @@
         </li>
         <li><hr/></li>
         <li>
-            <h3>Нормативные сроки обучения</h3>
+            <h3 class="text-align-center">Нормативные сроки обучения</h3>
             <table>
                 <tbody>
                     <tr>
@@ -153,7 +158,7 @@
         <li><hr/></li>
         <li>
             <b>Сроки действия государственной аккредитации: до 19.12.2026</b>
-            &nbsp;<a href="{% url 'credentials' %}">(Ссылка)</a>
+            &nbsp;<a href="{% url 'main_docs' %}">(Ссылка)</a>
         </li>
         <li><hr/></li>
         <li>
@@ -167,13 +172,52 @@
         <li>
             <h3>
                 <a href="{% url 'annotations' %}" style="text-decoration: none">
+                    Рабочие программы
+                </a>
+            </h3>
+        </li>
+        <li>
+            <h3>
+                <a href="{% url 'rp_annots' %}" style="text-decoration: none">
                     Аннотации к рабочим программам
                 </a>
             </h3>
         </li>
         <li><hr/></li>
         <li>
+            <h3>
+                <a href="{% url 'schedule' %}" style="text-decoration: none">
+                        Календарный учебный график
+                </a>
+            </h3>
+        </li>
+        <li><hr/></li>
+        <li>
             <h3><a href="{% url 'methodical_work' %}" style="text-decoration: none">Методические и иные документы</a></h3>
+            <br/>
+            <h4><a href="{% url 'study' %}">Учебный процесс</a></h4>
+        </li>
+        <li><hr/></li>
+        <li>
+            <h4>
+                Информация о реализуемых образовательных программах, в том числе о реализуемых адаптированных образовательных программах: <strong>не предусмотрено</strong>
+            </h4>
+        </li>
+        <li><hr/></li
+        <li>
+            <h3>
+                <a href="{% url 'el_dist_study' %}" style="text-decoration: none">
+                        Информация об использовании при реализации образовательных программ электронного обучения и дистанционных образовательных технологий
+                </a>
+            </h3>
+        </li>
+        <li><hr/></li>
+        <li>
+            <h3>
+                <a href="{% url 'about_standards' %}" style="text-decoration: none">
+                        Информация о федеральных государственных образовательных стандартах
+                </a>
+            </h3>
         </li>
         <li><hr/></li>
         <li>
@@ -189,39 +233,44 @@
                     </tr>
                     <tr>
                         <td>Образовательная программа начального общего образования</td>
-                        <td>355</td>
+                        <td>393</td>
                     </tr>
                     <tr>
                         <td>Образовательная программа основного общего образования</td>
-                        <td>369</td>
+                        <td>419</td>
                     </tr>
                     <tr>
                         <td>Образовательная программа среднего общего образования</td>
-                        <td>65</td>
+                        <td>57</td>
                     </tr>
                     <tr>
                         <td>Итого</td>
-                        <td>789</td>
+                        <td>869</td>
                     </tr>
                 </tbody>
             </table>
         </li>
         <li><hr/></li>
         <li>
-            <p>
+            <h4>
                 <b>Язык обучения:</b>&nbsp;
                 русский&nbsp;
                 <a href="{% url 'about_language' %}">
                     (положение о языке образования)
                 </a>
-            </p>
+            </h4>
         </li>
         <li>
-            <p>
+            <h4>
+                <a href="{% url 'curriculum' %}">Учебный план</a>
+            </h4>
+        </li>
+        <li>
+            <h4>
                 <a href="{% url 'about_schedules' %}">
-                    Учебные планы, календарные учебные графики,расписания работы кружков и секций
+                    Расписания работы кружков и секций
                 </a>
-            </p>
+            </h4>
         </li>
         <li><hr/></li>
     </ul>

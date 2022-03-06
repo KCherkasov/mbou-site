@@ -2,24 +2,29 @@ import re
 
 from django import forms
 from django.contrib.auth import authenticate
+from django.urls import reverse
 
 from mbou.models import News, LessonTiming, Document, DocumentCategory,\
-    StaffMember, Subject, StafferCategory, Photo, Album, UrlUser
+    StaffMember, Subject, StafferCategory, Photo, Album, UrlUser, FoodTable
 
 
 class AddNewsForm(forms.ModelForm):
     class Meta:
         model = News
-        fields = ['title', 'content', ]
+        fields = ['title', 'content', 'doc_url', 'pic', ]
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control mbou-input-wide',
                                             'placeholder': u'Тема новости', }),
             'content': forms.Textarea(attrs={'class': 'form-control mbou-input-wide',
                                              'placeholder': u'Текст новости', }),
+            'doc_url': forms.TextInput(attrs={'class': 'form-control mbou-input-wide', 'placeholder': u'Ссылка на документ', }),
+            'pic': forms.ClearableFileInput(attrs={'class': 'form-control-file',  'placeholder': u'Файл', }),
         }
         labels = {
             'title': u'Тема',
             'content': u'Текст',
+            'doc_url': u'Ссылка на документ',
+            'pic': u'Изображение',
         }
 
 
@@ -58,7 +63,8 @@ class DocumentForm(forms.Form):
     categories = forms.CharField(widget=forms.TextInput(
       attrs={'class': 'form-control', 'placeholder': u'Категории документа (каждая категория начинается с #)', }),
       label=u'Категории')
-
+    createNewsEntry = forms.BooleanField(widget=(forms.CheckboxInput(attrs={'class': 'form-control', })),label=u'Создать новость', required=False)
+    newsPic = forms.FileField(widget=forms.ClearableFileInput(attrs={'class': 'form-control-file', }), label=u'Картинка новости', required=False)
     def save(self):
         data = self.cleaned_data
         document = Document()
@@ -78,8 +84,64 @@ class DocumentForm(forms.Form):
             if cat_name is not None and cat_name != '':
                 category = DocumentCategory.objects.get_or_create(name=cat_name)
                 document.categories.add(category)
+        document.save()
+        createNews = data.get('createNewsEntry')
+        if createNews:
+            entry = News()
+            entry.title = document.title
+            entry.content = document.description
+            entry.doc_url = reverse('document_show', kwargs={'title': document.make_title_id(), })
+            entry.save()
+            if data.get('newsPic') is not None:
+                pic_file = data.get('newsPic')
+                pic_namext = re.split('[.]+', pic_file.name)
+                entry.pic.save('%s_%s.%s' % (pic_namext[0], str(entry.id), pic_namext[1]), pic_file, save=True)
+            entry.save()
         return document
 
+class DocumentSearchForm(forms.Form):
+    query = forms.CharField(widget=forms.TextInput(
+      attrs={'class': 'form-control', 'placeholder': u'Название документа или его фрагмент', }),
+      label=u'Название документа', max_length=150)
+
+    def clean(self):
+        data = self.cleaned_data
+        query = data.get('query')
+        query=query.lower()
+        if query is None or query == '':
+            raise forms.ValidationError('Пустой запрос. Введите название документа или его фрагмент для поиска')
+
+
+class FoodTableForm(forms.Form):
+    year = forms.CharField(widget=forms.TextInput(
+      attrs={'class': 'form-control', 'placeholder': u'Год', }),
+      label=u'Год', max_length=4)
+    month = forms.CharField(widget=forms.TextInput(
+      attrs={'class': 'form-control', 'placeholder': u'Месяц', }),
+      label=u'Месяц', max_length=2)
+    day = forms.CharField(widget=forms.TextInput(
+      attrs={'class': 'form-control', 'placeholder': u'День', }),
+      label=u'День', max_length=2)
+    is_minor = forms.CharField(widget=forms.TextInput(
+      attrs={'class': 'form-control', 'placeholder': u'sm - 1-4 классы', }),
+      label=u'Постфикс', max_length=2)
+    doc = forms.FileField(widget=forms.ClearableFileInput(attrs={'class': 'form-control-file', }), label=u'Таблица')
+
+    def save(self):
+        data = self.cleaned_data
+        ft = FoodTable()
+        ft.year = data.get('year')
+        ft.month = data.get('month')
+        ft.day = data.get('day')
+        ft.is_minor = data.get('is_minor')
+        ft.title_id = ft.make_title()
+        ft.save()
+        if data.get('doc') is not None:
+            doc_file = data.get('doc')
+            doc_namext = re.split('[.]+', doc_file.name)
+            ft.doc.save('%s.%s' % (ft.title_id, doc_namext[1]), doc_file, save=True)
+        ft.save()
+        return ft
 
 class SignInForm(forms.Form):
     login = forms.CharField(widget=forms.TextInput(

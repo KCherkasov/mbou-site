@@ -4,16 +4,10 @@
   Новости
 {% endblock %}
 
-{% block news_styles %}
-  class="dropdown-toggle" id="newsDropdown" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
-{% endblock %}
-
 {% block news %}
   {% if news %}
-  <div class="dropdown-menu" aria-labelledby="newsDropdown">
     {% for ne in news %}
       <a href="{{ ne.get_url }}" class="dropdown-item">{{ ne.title }}</a>
     {% endfor %}
-  </div>
   {% endif %}
 {% endblock %}
